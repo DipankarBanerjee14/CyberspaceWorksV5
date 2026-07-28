@@ -12,6 +12,7 @@ import { SiGoogleanalytics } from "react-icons/si";
 import SpotlightCard, { Spotlight } from "../SpotlightCard";
 import Antigravity from "../Antigravity";
 import SoftwareShowcase from "./CutoutCard";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 /* ── dot-grid bg ── */
 // const StyledPattern = styled.div`
@@ -179,6 +180,7 @@ function ptOnLine(pts, t) {
 
 /* ═══════════════ MAIN ═══════════════ */
 export default function OurServicesWithWires() {
+  const isMobile = useIsMobile();
   const containerRef = useRef(null);
   const canvasRef    = useRef(null);
   const chipRef      = useRef(null);
@@ -645,7 +647,8 @@ export default function OurServicesWithWires() {
 </div> */}
 {/* import Antigravity from './Antigravity'; */}
 
-   <div className="absolute inset-0 z-0">
+   {!isMobile && (
+      <div className="absolute inset-0 z-0">
         <Antigravity
           count={320}
           magnetRadius={7}
@@ -664,6 +667,7 @@ export default function OurServicesWithWires() {
           fieldStrength={18}
       />
       </div>
+    )}
 
       {/* Top fade — blends section edge into whatever is above */}
       <div className="absolute top-0 left-0 w-full pointer-events-none" style={{
