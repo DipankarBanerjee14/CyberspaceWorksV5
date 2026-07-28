@@ -1,0 +1,67 @@
+<svg viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg" fill="none"><g id="notion-avatar-face" fill="#ffffff"><svg width="1080px" height="1080px" viewBox="0 0 1080 1080" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <g id="Face/-8" stroke="none" stroke-width="1"  fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M532,379 C664.54834,379 772,486.45166 772,619 C772,751.54834 724.54834,899 592,899 C492.560218,899 373.476049,816.010833 320.189513,718.584987 C317.498129,718.859681 314.765451,719 312,719 C267.81722,719 232,683.18278 232,639 C232,599.134956 261.158843,566.080325 299.312086,560.00055 C325.599297,455.979213 419.809919,379 532,379 Z M295.858895,624.545187 L304.141105,655.454813" id="Path" stroke="#000000" stroke-width="24"></path>
+    </g>
+</svg></g>
+<g id="notion-avatar-nose" ><svg width="1080px" height="1080px" viewBox="0 0 1080 1080" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <g id="Nose/-5" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M673,568 C662.55102,590.836147 657.326531,613.414126 657.326531,635.733939 C657.326531,669.213657 673,686.992054 670.061224,702.552554 C668.102041,712.92622 653.081633,714.756867 625,708.044495" id="Path" stroke="#000000" stroke-width="16"></path>
+    </g>
+</svg></g>
+<g id="notion-avatar-mouth" ><svg width="1080" height="1080" viewBox="0 0 1080 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Mouth/ 11">
+<path id="Path" fill-rule="evenodd" clip-rule="evenodd" d="M529 741C529 741 595 755 627 755C659 755 689 745.528 689 745.528C689 745.528 688 814 618 814C548 814 529 741 529 741Z" stroke="black" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</svg>
+</g>
+<g id="notion-avatar-eyes" ><svg width="1080px" height="1080px" viewBox="0 0 1080 1080" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <g id="Eyes/-10" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group" transform="translate(520.000000, 512.000000)">
+            <g transform="translate(140.000000, 0.000000)">
+                <circle id="Oval" fill="#000000" cx="52" cy="28" r="24"></circle>
+                <path d="M1,16 C24.2727273,8 41.7272727,4 53.3636364,4 C65,4 79.5454545,8 97,16" id="Path" stroke="#000000" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" transform="translate(49.000000, 10.000000) rotate(-4.000000) translate(-49.000000, -10.000000) "></path>
+            </g>
+            <g>
+                <circle id="Oval" fill="#000000" transform="translate(46.000000, 28.000000) scale(-1, 1) translate(-46.000000, -28.000000) " cx="46" cy="28" r="24"></circle>
+                <path d="M1,16 C24.2727273,8 41.7272727,4 53.3636364,4 C65,4 79.5454545,8 97,16" id="Path" stroke="#000000" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" transform="translate(49.000000, 10.000000) scale(-1, 1) rotate(-4.000000) translate(-49.000000, -10.000000) "></path>
+            </g>
+        </g>
+    </g>
+</svg></g>
+<g id="notion-avatar-eyebrows" ><svg width="1080" height="1080" viewBox="0 0 1080 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Eyebrows/ 12">
+<g id="Group">
+<path id="Path" fill-rule="evenodd" clip-rule="evenodd" d="M681 505.316C681 505.316 698.641 492.863 706.392 490.578C714.144 488.294 738 489.316 738 489.316L755 494.913C755 494.913 730.25 494.897 716.549 497.08C702.848 499.263 681 505.316 681 505.316Z" fill="black" stroke="black" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Path_2" fill-rule="evenodd" clip-rule="evenodd" d="M597 505.316C597 505.316 579.359 492.863 571.608 490.578C563.856 488.294 540 489.316 540 489.316L523 494.913C523 494.913 547.75 494.897 561.451 497.08C575.152 499.263 597 505.316 597 505.316Z" fill="black" stroke="black" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+</svg>
+</g>
+<g id="notion-avatar-glasses" ><svg width="1080px" height="1080px" viewBox="0 0 1080 1080" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <g id="Glasses/-4" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="Group" transform="translate(289.000000, 479.000000)" fill="#000000" stroke="#000000" stroke-width="4">
+            <path d="M229.149255,4.2334278 C247.672154,8.12981325 283.261021,21.6236388 324.690343,35.0615291 L325.464481,35.3078466 C331.11768,37.0729902 339.032765,38.8353007 349.209737,40.594778 L349.209737,57.984989 C344.161954,60.5093754 341.061801,62.8807678 339.909277,65.0991662 C325.535839,92.7654109 298.479956,110.946086 257.050634,101.460516 C200.767297,88.5740028 181.801459,20.8331746 180.110466,9.76667675 C178.419474,-1.29982114 196.205221,-2.69651627 229.149255,4.2334278 Z M519.889534,9.76667675 C518.198541,20.8331746 499.232703,88.5740028 442.949366,101.460516 C401.520044,110.946086 374.464161,92.7654109 360.090723,65.0991662 C358.969348,62.9407245 356.004199,60.637447 351.195275,58.1893337 L350.790263,57.984989 L350.790263,40.594778 L352.195626,40.3492512 C362.16219,38.5895103 369.866867,36.8269363 375.309657,35.0615291 L377.788318,34.2552658 C418.155707,21.0877247 452.698304,8.05188555 470.850745,4.2334278 L472.809163,3.82763387 C504.498419,-2.63678054 521.546707,-1.07849118 519.889534,9.76667675 Z M213.93032,27.1568877 C197.020393,46.9184911 229.149255,89.6035544 261.278116,97.5081958 C293.406978,105.412837 334.836299,80.9084489 327.226832,57.984989 C319.617364,35.0615291 239.295211,8.97621262 213.93032,27.1568877 Z M486.06968,27.1568877 C460.704789,8.97621262 380.382636,35.0615291 372.773168,57.984989 C365.163701,80.9084489 406.593022,105.412837 438.721884,97.5081958 C470.850745,89.6035544 502.979607,46.9184911 486.06968,27.1568877 Z" id="Combined-Shape"></path>
+            <polygon id="Path" points="199 30 4 62 0 71 199 51"></polygon>
+        </g>
+    </g>
+</svg></g>
+<g id="notion-avatar-hair" ><svg width="1080px" height="1080px" viewBox="0 0 1080 1080" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <g id="Hairstyle/-25" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M227,151 C291,143 344.152059,161.487028 368.024158,212.689811 C410.238527,194.447151 459.304239,186 515,186 C629.125983,186 703.747536,236.594939 747,304 C779.083989,354 792.083989,420.666667 786,504 L782.3412,503.1612 C722.927067,489.4804 699,484 661,460 C635.666667,444 602.333333,419.666667 561,387 C524.333333,437 495.333333,470 474,486 C442,510 357,547 304,565 C251,583 232,598 232,648 C232,681.333333 258.666667,705 312,719 C325.996223,746.033167 340.996223,769.366501 357,789 C373.003777,808.633499 393.003777,825.633499 417,840 C335.666667,855.333333 262.333333,855.333333 197,840 C131.666667,824.666667 79.3333333,791 40,739 C94.6666667,735 127.666667,710.333333 139,665 C169.469054,543.123784 93,519 93,379 C93,239 147.699952,160.912506 227,151 Z" id="Path" stroke="#000000" stroke-width="12" fill="#000000"></path>
+    </g>
+</svg></g>
+<g id="notion-avatar-accessories" ><svg width="1080px" height="1080px" viewBox="0 0 1080 1080" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <g id="Accessories/-0" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"></g>
+</svg></g>
+<g id="notion-avatar-details" ><svg width="1080px" height="1080px" viewBox="0 0 1080 1080" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <g id="Details/-0" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"></g>
+</svg></g>
+<g id="notion-avatar-beard" ><svg width="1080px" height="1080px" viewBox="0 0 1080 1080" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <g id="Beard/-0" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"></g>
+</svg></g>
+<g id="notion-avatar-halloween" ><svg width="1080px" height="1080px" viewBox="0 0 1080 1080" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <g id="halloween/-0" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"></g>
+</svg></g>
+<g id="notion-avatar-christmas" ><svg width="1080px" height="1080px" viewBox="0 0 1080 1080" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <g id="Christmas/-0" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"></g>
+</svg></g></svg>

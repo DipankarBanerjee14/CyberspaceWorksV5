@@ -1,0 +1,326 @@
+"use client"
+
+import { useState, type FormEvent } from "react"
+import { useRouter } from "next/navigation"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+
+type AccountUser = {
+  _id: string
+  name: string
+  email: string
+  role: string
+  employeeRole?: string
+  jobLocation?: string
+  phone?: string
+  region?: string
+  source?: string
+  isActive?: boolean
+  homeLatitude?: number | null
+  homeLongitude?: number | null
+}
+
+type AccountEditorProps = {
+  user: AccountUser
+  canEdit: boolean
+}
+
+export function AccountEditor({ user, canEdit }: AccountEditorProps) {
+  const router = useRouter()
+  const canEditJobLocation = canEdit
+  const canEditHomeLocation = canEdit || user.role === "employee"
+  const canSubmit = canEdit || user.role === "employee"
+  const canEmployeeSelfEdit = user.role === "employee"
+  const [fetchingHomeLocation, setFetchingHomeLocation] = useState(false)
+  const [formData, setFormData] = useState({
+    name: user.name || "",
+    email: user.email || "",
+    phone: user.phone || "",
+    region: user.region || "",
+    source: user.source || "",
+    employeeRole: (user as any).employeeRole || "",
+    jobLocation: (user as any).jobLocation || "",
+    homeLatitude: user.homeLatitude === null || user.homeLatitude === undefined ? "" : String(user.homeLatitude),
+    homeLongitude: user.homeLongitude === null || user.homeLongitude === undefined ? "" : String(user.homeLongitude),
+    isActive: user.isActive ?? true,
+  })
+  const [saving, setSaving] = useState(false)
+  const [message, setMessage] = useState("")
+  const [error, setError] = useState("")
+
+  const handleChange = (field: keyof typeof formData, value: string | boolean) => {
+    setFormData((current) => ({
+      ...current,
+      [field]: value,
+    }))
+  }
+
+  const handleUseCurrentLocation = async () => {
+    if (!canEditHomeLocation || typeof navigator === "undefined" || !navigator.geolocation) {
+      setError("Geolocation is not available in this browser.")
+      return
+    }
+
+    setFetchingHomeLocation(true)
+    setError("")
+
+    try {
+      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, {
+          enableHighAccuracy: true,
+          timeout: 15000,
+          maximumAge: 0,
+        })
+      })
+
+      setFormData((current) => ({
+        ...current,
+        homeLatitude: String(position.coords.latitude),
+        homeLongitude: String(position.coords.longitude),
+      }))
+    } catch (locationError) {
+      setError(locationError instanceof Error ? locationError.message : "Unable to fetch location.")
+    } finally {
+      setFetchingHomeLocation(false)
+    }
+  }
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    if (!canSubmit) {
+      return
+    }
+
+    if (user.role === "employee") {
+      const homeLatitude = String(formData.homeLatitude ?? "").trim()
+      const homeLongitude = String(formData.homeLongitude ?? "").trim()
+
+      if (!homeLatitude || !homeLongitude) {
+        setError("Home latitude and longitude are required for employees.")
+        return
+      }
+    }
+
+    setSaving(true)
+    setError("")
+    setMessage("")
+
+    try {
+      const response = await fetch("/api/users", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: user._id,
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          region: formData.region,
+          employeeRole: formData.employeeRole,
+          jobLocation: formData.jobLocation,
+          homeLatitude: formData.homeLatitude,
+          homeLongitude: formData.homeLongitude,
+          source: formData.source,
+          status: formData.isActive ? "active" : "inactive",
+          isActive: formData.isActive,
+        }),
+      })
+
+      const payload = await response.json()
+
+      if (!response.ok) {
+        throw new Error(payload.error || "Unable to update account details.")
+      }
+
+      setMessage("Account details updated.")
+      router.refresh()
+    } catch (requestError) {
+      setError(requestError instanceof Error ? requestError.message : "Unable to update account details.")
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  return (
+    <Card className="border-border/60 bg-card/80 shadow-sm backdrop-blur-sm">
+      <CardHeader className="space-y-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <CardTitle className="text-lg">Account Details</CardTitle>
+          <Badge variant={canEdit || canEmployeeSelfEdit ? "default" : "secondary"} className="rounded-full">
+            {canEdit ? "Admin editable" : canEmployeeSelfEdit ? "Home editable" : "Read only"}
+          </Badge>
+        </div>
+        <CardDescription>
+          {canEdit
+            ? "Update your profile information. Changes are saved through the admin user API."
+            : canEmployeeSelfEdit
+              ? "Employees can update their home location here so remote attendance can be validated."
+              : "This profile can be viewed by everyone, but only admins can change details."}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form className="grid gap-4" onSubmit={handleSubmit}>
+          <div className="grid gap-2">
+            <Label htmlFor="account-name">Name</Label>
+            <Input
+              id="account-name"
+              value={formData.name}
+              onChange={(event) => handleChange("name", event.target.value)}
+              disabled={!canEdit}
+              className="bg-input text-foreground placeholder:text-muted-foreground"
+            />
+          </div>
+
+          <div className="grid gap-2 sm:grid-cols-2">
+            <div className="grid gap-2">
+              <Label htmlFor="account-email">Email</Label>
+              <Input
+                id="account-email"
+                type="email"
+                value={formData.email}
+                onChange={(event) => handleChange("email", event.target.value)}
+                disabled={!canEdit}
+                className="bg-input text-foreground placeholder:text-muted-foreground"
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="account-phone">Phone</Label>
+              <Input
+                id="account-phone"
+                value={formData.phone}
+                onChange={(event) => handleChange("phone", event.target.value)}
+                disabled={!canEdit}
+                className="bg-input text-foreground placeholder:text-muted-foreground"
+              />
+            </div>
+          </div>
+
+          <div className="grid gap-2 sm:grid-cols-2">
+            <div className="grid gap-2">
+              <Label htmlFor="account-region">Region</Label>
+              <Input
+                id="account-region"
+                value={formData.region}
+                onChange={(event) => handleChange("region", event.target.value)}
+                disabled={!canEdit}
+                className="bg-input text-foreground placeholder:text-muted-foreground"
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="account-employee-role">Employee role</Label>
+              <select
+                id="account-employee-role"
+                value={formData.employeeRole}
+                onChange={(e) => handleChange("employeeRole", e.target.value)}
+                disabled={!canEdit}
+                className="rounded-md border bg-input px-3 py-2 text-foreground"
+              >
+                <option value="">Not set</option>
+                <option value="Manager">Manager</option>
+                <option value="HR">HR</option>
+                <option value="Customer Agent">Customer Agent</option>
+                <option value="Staff">Staff</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="grid gap-2 sm:grid-cols-2">
+            <div className="grid gap-2">
+              <Label htmlFor="account-source">Source</Label>
+              <Input
+                id="account-source"
+                value={formData.source}
+                onChange={(event) => handleChange("source", event.target.value)}
+                disabled={!canEdit}
+                className="bg-input text-foreground placeholder:text-muted-foreground"
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="account-job-location">Job location</Label>
+              <select
+                id="account-job-location"
+                value={formData.jobLocation}
+                onChange={(e) => handleChange("jobLocation", e.target.value)}
+                disabled={!canEditJobLocation}
+                className="rounded-md border bg-input px-3 py-2 text-foreground"
+              >
+                <option value="">Not set</option>
+                <option value="office">Office</option>
+                <option value="remote">Remote</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="grid gap-2 sm:grid-cols-2">
+            <div className="grid gap-2">
+              <Label htmlFor="account-home-latitude">Home latitude</Label>
+              <Input
+                id="account-home-latitude"
+                type="number"
+                step="any"
+                value={formData.homeLatitude}
+                onChange={(event) => handleChange("homeLatitude", event.target.value)}
+                disabled={!canEditHomeLocation}
+                className="bg-input text-foreground placeholder:text-muted-foreground"
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="account-home-longitude">Home longitude</Label>
+              <Input
+                id="account-home-longitude"
+                type="number"
+                step="any"
+                value={formData.homeLongitude}
+                onChange={(event) => handleChange("homeLongitude", event.target.value)}
+                disabled={!canEditHomeLocation}
+                className="bg-input text-foreground placeholder:text-muted-foreground"
+              />
+            </div>
+          </div>
+
+          {canEditHomeLocation ? (
+            <div className="flex justify-start">
+              <Button type="button" variant="outline" size="sm" onClick={handleUseCurrentLocation} disabled={fetchingHomeLocation}>
+                {fetchingHomeLocation ? "Fetching location..." : "Use current location"}
+              </Button>
+            </div>
+          ) : null}
+
+          {user.role === "employee" && !canEdit ? (
+            <p className="text-xs text-muted-foreground">
+              Home coordinates are used to allow remote attendance within a 3km radius.
+            </p>
+          ) : null}
+
+          <div className="grid gap-2">
+            <Label htmlFor="account-status">Status</Label>
+            <Input
+              id="account-status"
+              value={formData.isActive ? "Active" : "Inactive"}
+              onChange={() => handleChange("isActive", !formData.isActive)}
+              disabled={!canEdit}
+              readOnly
+              className="bg-input text-foreground placeholder:text-muted-foreground"
+            />
+          </div>
+
+          {error ? <p className="text-sm text-destructive">{error}</p> : null}
+          {message ? <p className="text-sm text-emerald-600 dark:text-emerald-400">{message}</p> : null}
+
+          {canSubmit ? (
+            <div className="flex justify-end">
+              <Button type="submit" disabled={saving}>
+                {saving ? "Saving..." : "Save changes"}
+              </Button>
+            </div>
+          ) : null}
+        </form>
+      </CardContent>
+    </Card>
+  )
+}

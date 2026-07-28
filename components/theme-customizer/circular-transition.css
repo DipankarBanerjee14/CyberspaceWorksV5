@@ -1,0 +1,19 @@
+.mode-toggle-button {
+  position: relative;
+  isolation: isolate;
+}
+
+.mode-toggle-button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at center, color-mix(in srgb, currentColor 24%, transparent), transparent 70%);
+  opacity: 0;
+  transition: opacity 180ms ease;
+  z-index: -1;
+}
+
+.mode-toggle-button:hover::before {
+  opacity: 1;
+}
