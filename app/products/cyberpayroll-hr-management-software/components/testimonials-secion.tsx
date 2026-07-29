@@ -103,9 +103,9 @@ export function TestimonialsSection() {
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
             Empowering Innovation Worldwide
           </h2>
-          <p className="text-lg text-muted-foreground">
+          {/* <p className="text-lg text-muted-foreground">
             Join thousands of developers and teams who trust our platform to build exceptional digital experiences.
-          </p>
+          </p> */}
         </div>
 
         {/* Testimonials Masonry Grid */}

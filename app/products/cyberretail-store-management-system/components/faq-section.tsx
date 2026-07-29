@@ -55,9 +55,9 @@ const FaqSection = () => {
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
             Frequently Asked Questions
           </h2>
-          <p className="text-lg text-muted-foreground">
+          {/* <p className="text-lg text-muted-foreground">
             Everything you need to know about ShadcnStore components, licensing, and integration. Still have questions? We&apos;re here to help!
-          </p>
+          </p> */}
         </div>
 
         {/* FAQ Content */}

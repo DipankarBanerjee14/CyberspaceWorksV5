@@ -34,8 +34,7 @@ export function CTASection() {
               {/* Main Content */}
               <div className='space-y-6'>
                 <h1 className='text-4xl font-bold tracking-tight text-balance sm:text-5xl lg:text-6xl'>
-                  Ready to turn your kitchen into a 
-&apos;s
+                  Ready to turn your kitchen into a
                   <span className='flex sm:inline-flex justify-center'>
                     <span className='relative mx-2'>
                       <span className='bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent'>
@@ -57,12 +56,12 @@ export function CTASection() {
                 <Button size='lg' className='cursor-pointer px-8 py-6 text-lg font-medium' asChild>
                   <a href='#contact' >
                     <Package className='me-2 size-5' />
-                   📦 Start Free Trial →
+                    Start Free Trial →
                   </a>
                 </Button>
                 <Button variant='outline' size='lg' className='cursor-pointer px-8 py-6 text-lg font-medium group' asChild>
                   <a href='https://github.com/silicondeck/shadcn-dashboard-landing-template' target='_blank' rel='noopener noreferrer'>
-                    <Github className='me-2 size-5' />
+                    {/* <Github className='me-2 size-5' /> */}
                      View Live Demo
                     <ArrowRight className='ms-2 size-4 transition-transform group-hover:translate-x-1' />
                   </a>
