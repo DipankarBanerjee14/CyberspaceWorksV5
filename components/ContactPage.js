@@ -367,8 +367,8 @@ const [formData, setFormData] = useState({
 
             <p className="text-gray-400 flex items-center gap-2 mt-3">
               <IoMailOutline />
-              <a href="mailto:cyberspaceworksofficial@gmail.com" className="hover:underline">
-                cyberspaceworksofficial@gmail.com
+              <a href="mailto:contact@cyberspaceworks.com" className="hover:underline">
+                contact@cyberspaceworks.com
               </a>
             </p>
 

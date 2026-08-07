@@ -156,10 +156,10 @@ export default function PrivacyPolicy() {
     <p className="text-gray-400 text-sm">
       For questions or concerns regarding this Privacy Policy, please contact us at{" "}
       <a
-        href="mailto:cyberspaceworksofficial@gmail.com"
+        href="mailto:contact@cyberspaceworks.com"
         className="text-cyan-400 hover:underline text-lg font-medium cursor-pointer"
       >
-        cyberspaceworksofficial@gmail.com
+        contact@cyberspaceworks.com
       </a>{" "}
       or through our{" "}
       <a

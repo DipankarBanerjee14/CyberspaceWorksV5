@@ -863,7 +863,7 @@ const [wishlistError, setWishlistError] = useState<string | null>(null);
 
   const socialLinks2 = [
     { name: "Call",      icon: <FaPhoneAlt />,  link: "tel:7980715765" },
-    { name: "Mail",      icon: <FaEnvelope />,  link: "mailto:cyberspaceworksofficial@gmail.com" },
+    { name: "Mail",      icon: <FaEnvelope />,  link: "mailto:contact@cyberspaceworks.com" },
     { name: "WhatsApp",  icon: <FaWhatsapp />,  link: "https://wa.me/7980715765" },
     { name: "Instagram", icon: <FaInstagram />, link: "https://www.instagram.com/cyberspaceworks" },
     { name: "LinkedIn",  icon: <FaLinkedin />,  link: "https://www.linkedin.com/company/cyberspace-works" },
@@ -1421,11 +1421,10 @@ const onWishlistToggle = async (item: any) => {
 <p className="text-gray-400 flex items-start gap-2 mt-3">
   <IoMailOutline className="text-cyan-400 mt-1 size-5" />
   <a
-    href="mailto:cyberspaceworksofficial@gmail.com"
+    href="mailto:contact@cyberspaceworks.com"
     className="hover:underline leading-snug text-center"
   >
-    cyberspaceworks
-    official@gmail.com
+    contact@cyberspaceworks.com
   </a>
 </p>
 
