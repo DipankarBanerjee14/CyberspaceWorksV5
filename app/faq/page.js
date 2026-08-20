@@ -66,7 +66,7 @@ export default function FAQPage() {
                 />
                 <h4 className="font-medium text-lg">{faq.q}</h4>
                 <FaChevronDown
-                  className={`transition-transform duration-300 ${
+                  className={`text-white transition-transform duration-300 ${
                     openIndex === index ? "rotate-180" : ""
                   }`}
                 />

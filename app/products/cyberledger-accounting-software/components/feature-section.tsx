@@ -64,12 +64,12 @@ const secondaryFeatures = [
 
 export function FeaturesSection() {
   return (
-    <section id="features" className="py-24 sm:py-32 bg-black">
+    <section id="features" className="py-12 sm:py-16 bg-black">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="mx-auto max-w-2xl text-center mb-16">
-          <Badge variant="outline" className="mb-4">📒 Finance Features</Badge>
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
+          <Badge variant="outline" className="mb-4 text-white">📒 Finance Features</Badge>
+          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4 text-white">
             Everything you need to keep your books airtight
           </h2>
           <p className="text-lg text-muted-foreground">
@@ -104,7 +104,7 @@ export function FeaturesSection() {
                     <span className="size-5 text-primary" aria-hidden="true">{feature.icon}</span>
                   </div>
                   <div>
-                    <h3 className="text-foreground font-medium">{feature.title}</h3>
+                    <h3 className="text-white font-medium">{feature.title}</h3>
                     <p className="text-muted-foreground mt-1 text-sm">{feature.description}</p>
                   </div>
                 </li>
@@ -148,7 +148,7 @@ export function FeaturesSection() {
                     <span className="size-5 text-primary" aria-hidden="true">{feature.icon}</span>
                   </div>
                   <div>
-                    <h3 className="text-foreground font-medium">{feature.title}</h3>
+                    <h3 className="text-white font-medium">{feature.title}</h3>
                     <p className="text-muted-foreground mt-1 text-sm">{feature.description}</p>
                   </div>
                 </li>

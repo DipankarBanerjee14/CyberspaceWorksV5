@@ -191,12 +191,14 @@ function EnquiryDrawer({
   const [view, setView] = useState<DrawerView>("home")
   const [selectedSoftware, setSelectedSoftware] = useState<string[]>([])
   const [form, setForm] = useState({ name: "", email: "",phone: "", service: "", description: "" })
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const router = useRouter();
 
   const reset = () => {
     setView("home")
     setSelectedSoftware([])
     setForm({ name: "", email: "",phone: "", service: "", description: "" })
+    setIsSubmitting(false)
   }
 
   const toggleSoftware = (id: string) => {
@@ -205,15 +207,51 @@ function EnquiryDrawer({
     )
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setView("success")
+    setIsSubmitting(true)
+    try {
+      const payload = {
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        services: [form.service],
+        requirement: form.description,
+        source: "quick-enquiry",
+      }
+      console.log(payload);
+      const res = await fetch("/api/quick-enquiry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      })
+      if (!res.ok) throw new Error("Failed to submit")
+      setView("success")
+    } catch (err) {
+      alert("Something went wrong. Please try again.")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
+
+  useEffect(() => {
+    if (open) {
+      document.documentElement.style.overflow = "hidden"
+      document.body.style.overflow = "hidden"
+    } else {
+      document.documentElement.style.overflow = ""
+      document.body.style.overflow = ""
+    }
+    return () => {
+      document.documentElement.style.overflow = ""
+      document.body.style.overflow = ""
+    }
+  }, [open])
   
 
   const inputClass = `
     w-full rounded-2xl bg-white/[0.05] border border-white/[0.09]
-    px-4 py-3 text-[14px] text-white placeholder-white/25
+    px-4 py-2.5 text-[14px] text-white placeholder-white/25
     focus:outline-none focus:border-white/25 focus:bg-white/[0.07]
     transition-all duration-200
   `
@@ -233,10 +271,10 @@ function EnquiryDrawer({
 
         {/* ── Panel ── */}
         <Drawer.Popup className="drawer-panel fixed top-0 right-0 z-[2001] h-screen w-full max-w-[540px] bg-[#111113] flex flex-col overflow-hidden transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]">
-          <Drawer.Content className="flex flex-col h-full">
+          <Drawer.Content className="flex flex-col h-full min-h-0">
 
             {/* ════ TOP BAR ════ */}
-            <div className="flex items-center justify-between px-7 py-5 border-b border-white/[0.07] shrink-0">
+            <div className="flex items-center justify-between px-5 py-3 border-b border-white/[0.07] shrink-0">
               <div className="flex items-center gap-3">
                 {/* Back button — shown on sub-views */}
                 {(view === "project" || view === "software") && (
@@ -267,7 +305,7 @@ function EnquiryDrawer({
             </div>
 
             {/* ════ VIEWS ════ */}
-            <div className="flex-1 overflow-y-auto overflow-x-hidden">
+            <div className="flex-1 min-h-0 overflow-hidden">
 
               {/* ── HOME VIEW ── */}
               {drawerType === "enquiry" && view === "home" && (
@@ -355,10 +393,10 @@ function EnquiryDrawer({
 
               {/* ── PROJECT FORM VIEW ── */}
               {drawerType === "enquiry" && view === "project" && (
-                <form onSubmit={handleSubmit} className="form-slide-in px-7 py-7 space-y-5">
+                <form onSubmit={handleSubmit} className=" px-5 py-4 space-y-3">
                   <div>
-                    <h3 className="text-[1.4rem] font-bold text-white mb-1">Start a Project</h3>
-                    <p className="text-[13px] text-white/40">Fill in the details and we&apos;ll get back to you within 24 hours.</p>
+                    <h3 className="text-[1.2rem] font-bold text-white mb-0.5">Start a Project</h3>
+                    <p className="text-[12px] text-white/40">Fill in the details and we&apos;ll get back to you within 24 hours.</p>
                   </div>
 
                   {/* Name */}
@@ -387,7 +425,7 @@ function EnquiryDrawer({
                     <input
                       type="phone" required placeholder="0000000000"
                       value={form.phone}
-                      onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+                      onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
                       className={inputClass}
                     />
                   </div>
@@ -437,7 +475,7 @@ function EnquiryDrawer({
                   <div>
                     <label className={labelClass}>Project Description</label>
                     <textarea
-                      rows={4} placeholder="Tell us about your project..."
+                      rows={2} placeholder="Tell us about your project..."
                       value={form.description}
                       onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
                       className={`${inputClass} resize-none`}
@@ -446,19 +484,21 @@ function EnquiryDrawer({
 
                   <button
                     type="submit"
-                    className="w-full py-3.5 rounded-2xl bg-[#00ced4] hover:bg-[#6d8dff] active:scale-[0.98] text-white font-bold text-[14px] tracking-wide transition-all duration-200 shadow-[0_0_24px_rgba(91,124,255,0.3)]"
+                    disabled={isSubmitting}
+                    className="w-full py-3 rounded-2xl bg-[#00ced4] hover:bg-[#6d8dff] active:scale-[0.98] text-white font-bold text-[13px] tracking-wide transition-all duration-200 shadow-[0_0_24px_rgba(91,124,255,0.3)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
-                    Submit Enquiry →
+                    {isSubmitting && <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />}
+                    {isSubmitting ? "Submitting..." : "Submit Enquiry →"}
                   </button>
                 </form>
               )}
 
               {/* ── SOFTWARE PURCHASE VIEW ── */}
              {drawerType === "enquiry" && view === "software" && (
-                <form onSubmit={handleSubmit} className="form-slide-in px-7 py-7 space-y-5">
+                <form onSubmit={handleSubmit} className="form-slide-in px-5 py-4 space-y-3">
                   <div>
-                    <h3 className="text-[1.4rem] font-bold text-white mb-1">Purchase a Software</h3>
-                    <p className="text-[13px] text-white/40">Select the software(s) you&apos;re interested in and leave your details.</p>
+                    <h3 className="text-[1.2rem] font-bold text-white mb-0.5">Purchase a Software</h3>
+                    <p className="text-[12px] text-white/40">Select the software(s) you&apos;re interested in and leave your details.</p>
                   </div>
 
                 
@@ -490,7 +530,7 @@ function EnquiryDrawer({
                     <input
                       type="phone" required placeholder="0000000000"
                       value={form.phone}
-                      onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+                      onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
                       className={inputClass}
                     />
                   </div>
@@ -510,7 +550,7 @@ function EnquiryDrawer({
       rounded-xl
       bg-white/[0.03]
       border border-white/[0.08]
-      px-4 py-3
+      px-4 py-2.5
       text-sm text-white
       outline-none
       focus:border-[#5b7cff]/60
@@ -537,7 +577,7 @@ function EnquiryDrawer({
                   <div>
                     <label className={labelClass}>Additional Notes</label>
                     <textarea
-                      rows={3} placeholder="Any specific requirements or questions..."
+                      rows={2} placeholder="Any specific requirements or questions..."
                       value={form.description}
                       onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
                       className={`${inputClass} resize-none`}
@@ -546,10 +586,11 @@ function EnquiryDrawer({
 
                   <button
                     type="submit"
-                    disabled={selectedSoftware.length === 0}
-                    className="w-full py-3.5 rounded-2xl bg-purple-600 hover:bg-purple-500 active:scale-[0.98] text-white font-bold text-[14px] tracking-wide transition-all duration-200 shadow-[0_0_24px_rgba(147,51,234,0.3)] disabled:opacity-40 disabled:cursor-not-allowed"
+                    disabled={isSubmitting}
+                    className="w-full py-3 rounded-2xl bg-purple-600 hover:bg-purple-500 active:scale-[0.98] text-white font-bold text-[13px] tracking-wide transition-all duration-200 shadow-[0_0_24px_rgba(147,51,234,0.3)] disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
-                    Submit Enquiry →
+                    {isSubmitting && <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />}
+                    {isSubmitting ? "Submitting..." : "Submit Enquiry →"}
                   </button>
                 </form>
               )}
@@ -1422,7 +1463,7 @@ const onWishlistToggle = async (item: any) => {
   <IoMailOutline className="text-cyan-400 mt-1 size-5" />
   <a
     href="mailto:contact@cyberspaceworks.com"
-    className="hover:underline leading-snug text-center"
+    className="hover:underline leading-snug text-center text-sm"
   >
     contact@cyberspaceworks.com
   </a>

@@ -306,7 +306,7 @@ import LenisProvider from '../../components/LenisProviders.tsx';
      <section className="relative z-0 py-16 bg-black grid w-full items-center justify-center">
       <div className="text-center mb-12 -mt-8">
       <h2
-            className="text-4xl sm:text-5xl font-semibold text-cyan-400 tracking-tight"
+            className="text-4xl sm:text-5xl font-semibold text-white tracking-tight"
             style={{ fontFamily: "'Syne','DM Sans',sans-serif" }}
           >
             About Us

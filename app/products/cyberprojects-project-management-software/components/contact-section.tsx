@@ -80,11 +80,11 @@ export function ContactSection() {
   }
 
   return (
-    <section id="contact" className="py-24 sm:py-32 bg-black">
+    <section id="contact" className="py-12 sm:py-16 bg-black">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center mb-16">
-          <Badge variant="outline" className="mb-4">Get In Touch</Badge>
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
+          <Badge variant="outline" className="mb-4 text-white">Get In Touch</Badge>
+          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4 text-white">
             Need help or have suggestion or questions?
           </h2>
           {/* <p className="text-lg text-muted-foreground">
@@ -93,14 +93,13 @@ export function ContactSection() {
         </div>
 
         <div className="grid gap-8 lg:grid-cols-1">
-          {/* Contact Options */}
-          
+          {/* Contact Options removed */}
 
           {/* Contact Form */}
           <div className="lg:col-span-2 order-1 lg:order-2">
-            <Card>
+            <Card className="bg-zinc-900">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-white">
                   <Mail className="h-5 w-5" />
                   Send us a message
                 </CardTitle>
@@ -207,7 +206,7 @@ export function ContactSection() {
                         </FormItem>
                       )}
                     />
-                    <Button type="submit" className="w-full cursor-pointer">
+                    <Button type="submit" className="w-full cursor-pointer bg-white text-black hover:bg-gray-200">
                       Send Message
                     </Button>
                   </form>

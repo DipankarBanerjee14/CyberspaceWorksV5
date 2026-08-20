@@ -32,18 +32,6 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
   },
-
-  // twitter: {
-  //   card: "summary_large_image",
-  //   title: "CyberPayroll: Automated HRMS & Payroll Software | Cyberspace Works",
-  //   description:
-  //     "Simplify your human resources operations with CyberPayroll. Automate complex salary calculations, manage employee attendance, and generate compliant payslips effortlessly.",
-  // },
-
-  // robots: {
-  //   index: true,
-  //   follow: true,
-  // },
 };
 
 

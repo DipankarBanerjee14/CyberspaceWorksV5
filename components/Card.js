@@ -15,7 +15,7 @@ const StyledWrapper = styled.div`
     height: 250px;
     border-radius: 12px;
     padding: 1px;
-    background: radial-gradient(circle 230px at 0% 0%, #ffffff, #0c0d0d);
+    background: radial-gradient(circle 230px at 0% 0%, #ffffff, #18181b);
     position: relative;
     overflow: hidden;
     box-shadow: 0 0 8px ${(props) => props.glow}33;
@@ -59,7 +59,7 @@ const StyledWrapper = styled.div`
     height: 100%;
     border-radius: 10px;
     border: solid 1px #202222;
-    background: radial-gradient(circle 280px at 0% 0%, #1a1b1c, #0c0d0d);
+    background: radial-gradient(circle 280px at 0% 0%, #27272a, #18181b);
     display: flex;
     align-items: center;
     justify-content: center;

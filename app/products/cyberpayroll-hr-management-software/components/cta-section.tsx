@@ -7,15 +7,15 @@ import { Separator } from '@/components/ui/separator'
 
 export function CTASection() {
   return (
-    <section className='py-16 lg:py-24 bg-black'>
+    <section className='py-8 lg:py-12 bg-black'>
       <div className='container mx-auto px-4 lg:px-8'>
         <div className='mx-auto max-w-4xl'>
           <div className='text-center'>
             <div className='space-y-8'>
               {/* Badge and Stats */}
               <div className='flex flex-col items-center gap-4'>
-                <Badge variant='outline' className='flex items-center gap-2'>
-                  <TrendingUp className='size-3' />
+                <Badge variant='outline' className='flex items-center gap-2 text-white'>
+                  {/* <TrendingUp className='size-3' /> */}
                   🚀 HR & Payroll Suite
                 </Badge>
 
@@ -60,8 +60,8 @@ export function CTASection() {
                     Start Free Trial →  
                   </a>
                 </Button>
-                <Button variant='outline' size='lg' className='cursor-pointer px-8 py-6 text-lg font-medium group' asChild>
-                  <a href='https://github.com/silicondeck/shadcn-dashboard-landing-template' target='_blank' rel='noopener noreferrer'>
+                <Button variant='outline' size='lg' className='cursor-pointer px-8 py-6 text-lg font-medium group text-black dark:text-white' asChild>
+                  <a href='#contact'>
                     {/* <Github className='me-2 size-5' /> */}
                     View Live Demo
                     <ArrowRight className='ms-2 size-4 transition-transform group-hover:translate-x-1' />

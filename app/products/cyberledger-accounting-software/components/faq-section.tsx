@@ -47,11 +47,11 @@ const faqItems: FaqItem[] = [
 
 const FaqSection = () => {
   return (
-    <section id="faq" className="py-24 sm:py-32 bg-black">
+    <section id="faq" className="py-12 sm:py-16 bg-black">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="mx-auto max-w-2xl text-center mb-16">
-          <Badge variant="outline" className="mb-4">FAQ</Badge>
+          <Badge variant="outline" className="mb-4 text-white">FAQ</Badge>
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
             Frequently Asked Questions
           </h2>
@@ -70,7 +70,7 @@ const FaqSection = () => {
                     <AccordionTrigger className='cursor-pointer items-center gap-4 rounded-none bg-transparent py-2 ps-3 pe-4 hover:no-underline data-[state=open]:border-b'>
                       <div className='flex items-center gap-4'>
                         <div className='bg-primary/10 text-primary flex size-9 shrink-0 items-center justify-center rounded-full'>
-                          <CircleHelp className='size-5' />
+                          <CircleHelp className='size-5 text-white' />
                         </div>
                         <span className='text-start font-semibold'>{item.question}</span>
                       </div>

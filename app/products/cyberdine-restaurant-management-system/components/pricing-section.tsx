@@ -149,19 +149,19 @@ export function PricingSection() {
   }
 
   return (
-    <section id="pricing" className="py-24 sm:py-32 bg-black">
+    <section id="pricing" className="py-12 sm:py-16 bg-black">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="mx-auto max-w-2xl text-center mb-12">
-          <Badge variant="outline" className="mb-4">
+          <Badge variant="outline" className="mb-4 text-white">
             Pricing Plans
           </Badge>
 
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
+          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4 text-white">
             Choose your plan
           </h2>
 
-          <p className="text-lg text-muted-foreground mb-8">
+          <p className="text-lg text-white/60 mb-8">
             Start building with our free components or upgrade to
             Pro for access to premium templates and advanced
             features.
@@ -175,25 +175,25 @@ export function PricingSection() {
               onValueChange={(value) => {
                 if (value) setBilling(value)
               }}
-              className="bg-secondary text-secondary-foreground border-none rounded-full p-1 cursor-pointer shadow-none"
+              className="bg-zinc-900 text-secondary-foreground border border-white/20 rounded-full p-1 cursor-pointer shadow-none"
             >
               <ToggleGroupItem
                 value="monthly"
-                className="data-[state=on]:bg-background data-[state=on]:border-border border-transparent border px-6 rounded-full! data-[state=on]:text-foreground hover:bg-transparent cursor-pointer transition-colors"
+                className="data-[state=on]:bg-transparent data-[state=on]:border-white data-[state=on]:border border-transparent px-6 rounded-full! text-white data-[state=on]:text-white hover:text-cyan-400 cursor-pointer transition-colors"
               >
                 Monthly
               </ToggleGroupItem>
 
               <ToggleGroupItem
                 value="yearly"
-                className="data-[state=on]:bg-background data-[state=on]:border-border border-transparent border px-6 rounded-full! data-[state=on]:text-foreground hover:bg-transparent cursor-pointer transition-colors"
+                className="data-[state=on]:bg-transparent data-[state=on]:border-white data-[state=on]:border border-transparent px-6 rounded-full! text-white data-[state=on]:text-white hover:text-cyan-400 cursor-pointer transition-colors"
               >
                 Annually
               </ToggleGroupItem>
 
               <ToggleGroupItem
                 value="lifetime"
-                className="data-[state=on]:bg-background data-[state=on]:border-border border-transparent border px-6 rounded-full! data-[state=on]:text-foreground hover:bg-transparent cursor-pointer transition-colors"
+                className="data-[state=on]:bg-white data-[state=on]:border-white data-[state=on]:text-black data-[state=on]:border border-transparent px-6 rounded-full! text-white hover:text-cyan-400 cursor-pointer transition-colors"
               >
                 Lifetime
               </ToggleGroupItem>
@@ -215,10 +215,10 @@ export function PricingSection() {
               {plans.map((plan, index) => (
                 <div
                   key={index}
-                  className={`p-8 grid grid-rows-subgrid row-span-4 gap-6 ${
+                    className={`p-8 grid grid-rows-subgrid row-span-4 gap-6 ${
                     plan.popular
-                      ? "my-2 mx-4 rounded-xl bg-card  shadow-xl ring-1 ring-foreground/10 backdrop-blur border border-cyan-500"
-                      : ""
+                      ? "my-2 mx-4 rounded-xl bg-white text-black shadow-xl ring-1 ring-foreground/10 backdrop-blur border border-cyan-500"
+                      : "text-white"
                   }`}
                 >
                   {/* Plan Header */}
@@ -227,7 +227,7 @@ export function PricingSection() {
                       {plan.name}
                     </div>
 
-                    <div className="text-muted-foreground text-balance text-sm">
+                    <div className="text-black/60 dark:text-white/60 text-balance text-sm">
                       {plan.description}
                     </div>
                   </div>
@@ -255,8 +255,8 @@ export function PricingSection() {
                       onClick={() => setSelectedPlan(plan)}
                       className={`group/button inline-flex h-8 w-full shrink-0 items-center justify-center gap-1.5 rounded-lg border border-transparent bg-clip-padding px-2.5 text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 my-2 ${
                         plan.popular
-                          ? "border-[0.5px] border-white/25 bg-primary text-primary-foreground shadow-md shadow-black/20 ring-1 ring-primary/15 hover:bg-primary/90"
-                          : "border border-transparent bg-background shadow-sm shadow-black/15 ring-1 ring-foreground/10 hover:bg-muted/50"
+                          ? "border-[0.5px] border-black bg-black text-white shadow-md shadow-black/20 ring-1 ring-primary/15 hover:bg-black/90"
+                          : "border border-white bg-white text-black shadow-sm shadow-black/15 ring-1 ring-foreground/10 hover:bg-white/90"
                       }`}
                     >
                       {plan.cta}
@@ -442,7 +442,7 @@ export function PricingSection() {
                             className="flex items-center gap-3"
                           >
                             <Check
-                              className="text-muted-foreground size-4 shrink-0"
+                              className="text-current/60 size-4 shrink-0"
                               strokeWidth={2.5}
                             />
 
@@ -460,7 +460,7 @@ export function PricingSection() {
 
         {/* Enterprise Note */}
         <div className="mt-16 text-center">
-          <p className="text-muted-foreground">
+          <p className="text-white/60">
             Need custom components or have questions?{" "}
             <Button
               variant="link"

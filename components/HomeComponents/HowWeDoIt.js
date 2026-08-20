@@ -91,7 +91,7 @@
       //       <h4 className="text-lg font-semibold mb-2">
       //         Business Analysis & Tech Assessment
       //       </h4>
-      //       <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
+      //       <p className="text-white text-sm leading-relaxed max-w-sm">
       //         We analyze your business, find the best tech and tools to use,
       //         and create a researched visualization. No fluff. Just facts.
       //       </p>
@@ -113,7 +113,7 @@
       //       <h4 className="text-lg font-semibold mb-2">
       //         Project Execution and Crafting the Best You Can Get
       //       </h4>
-      //       <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
+      //       <p className="text-white text-sm leading-relaxed max-w-sm">
       //         We start working on the project with the best and latest tech and
       //         tools available, maintaining quality.
       //       </p>
@@ -135,7 +135,7 @@
       //       <h4 className="text-lg font-semibold mb-2">
       //         DTD: Deployment, Test and Delivery
       //       </h4>
-      //       <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
+      //       <p className="text-white text-sm leading-relaxed max-w-sm">
       //         After completion, we deploy the project, test rigorously to every
       //         scenario and when passed, we deliver it to you.
       //       </p>
@@ -157,7 +157,7 @@
       //       <h4 className="text-lg font-semibold mb-2">
       //         Monitor, Optimize, and Scale
       //       </h4>
-      //       <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
+      //       <p className="text-white text-sm leading-relaxed max-w-sm">
       //         We don’t disappear. We track, tweak, and improve your stack as you
       //         grow, all under flat fee support.
       //       </p>
@@ -248,7 +248,7 @@ const [mode, setMode] = useState("service");
             We craft, solve, and support your tech from day one to never-let-you-down.
           </p>
           )}
-          {mode === "product" && ( <p className="text-gray-400 max-w-2xl mx-auto text-base md:text-lg">
+          {mode === "product" && ( <p className="text-white max-w-2xl mx-auto text-base md:text-lg">
             We build, optimize, and support your infrastructure from day one to ensure non-stop growth.
           </p>
           )}
@@ -263,9 +263,8 @@ const [mode, setMode] = useState("service");
         {/* Headings */}
         {/* <div className="text-center mb-20">
           <h2 className="text-4xl font-bold mb-4">How We Do It</h2>
-          <p className="text-gray-400 max-w-2xl mx-auto text-base md:text-lg">
-            We craft, solve, and support your tech from day one to
-            never-let-you-down.
+            <p className="text-white max-w-2xl mx-auto text-base md:text-lg">
+            We craft, solve, and support your tech from day one to never-let-you-down.
           </p>
         </div> */}
  
@@ -309,7 +308,7 @@ const [mode, setMode] = useState("service");
             <h4 className="text-lg font-semibold mb-2">
               Business Analysis & Tech Assessment
             </h4>
-            <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
+            <p className="text-white text-sm leading-relaxed max-w-sm">
               We analyze your business, find the best tech and tools to use,
               and create a researched visualization. No fluff. Just facts.
             </p>
@@ -331,7 +330,7 @@ const [mode, setMode] = useState("service");
             <h4 className="text-lg font-semibold mb-2">
               Project Execution and Crafting the Best You Can Get
             </h4>
-            <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
+            <p className="text-white text-sm leading-relaxed max-w-sm">
               We start working on the project with the best and latest tech and
               tools available, maintaining quality.
             </p>
@@ -353,7 +352,7 @@ const [mode, setMode] = useState("service");
             <h4 className="text-lg font-semibold mb-2">
               DTD: Deployment, Test and Delivery
             </h4>
-            <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
+            <p className="text-white text-sm leading-relaxed max-w-sm">
               After completion, we deploy the project, test rigorously to every
               scenario and when passed, we deliver it to you.
             </p>
@@ -375,7 +374,7 @@ const [mode, setMode] = useState("service");
             <h4 className="text-lg font-semibold mb-2">
               Monitor, Optimize, and Scale
             </h4>
-            <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
+            <p className="text-white text-sm leading-relaxed max-w-sm">
               We don’t disappear. We track, tweak, and improve your stack as you
               grow, all under flat fee support.
             </p>
@@ -431,7 +430,7 @@ const [mode, setMode] = useState("service");
             <h4 className="text-lg font-semibold mb-2">
               Seamless Integration & Setup 
             </h4>
-            <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
+            <p className="text-white text-sm leading-relaxed max-w-sm">
              We analyze your existing workflow to configure the perfect environment. No complex onboarding. Just a smooth, guided setup tailored to your data.
 
             </p>
@@ -453,7 +452,7 @@ const [mode, setMode] = useState("service");
             <h4 className="text-lg font-semibold mb-2">
               Intelligent Automation & Core Execution
             </h4>
-            <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
+            <p className="text-white text-sm leading-relaxed max-w-sm">
               The platform instantly goes to work, leveraging advanced algorithms and the latest tech stack to automate tasks while maintaining absolute data integrity.
 
             </p>
@@ -475,7 +474,7 @@ const [mode, setMode] = useState("service");
             <h4 className="text-lg font-semibold mb-2">
               Continuous Deployment & Testing
             </h4>
-            <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
+            <p className="text-white text-sm leading-relaxed max-w-sm">
               We push updates seamlessly without downtime. Every feature is rigorously sandboxed and tested across all environments before it reaches your dashboard.
             </p>
           </motion.div>
@@ -496,7 +495,7 @@ const [mode, setMode] = useState("service");
             <h4 className="text-lg font-semibold mb-2">
               Proactive Monitoring & Infinite Scaling
             </h4>
-            <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
+            <p className="text-white text-sm leading-relaxed max-w-sm">
               We don’t just host your data; we optimize it. Our system tracks performance bottlenecks, auto-scales under heavy loads, and offers 24/7 dedicated support.
 
             </p>

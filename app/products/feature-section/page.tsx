@@ -11,15 +11,16 @@ import {
   BarChart3,
   Layout,
   BarChart,
+  HardDrive,
 } from "lucide-react"
 import { OrbitingCircles } from "../../../components/ui/orbiting-circles"
 import  Barchart02  from "../../../components/Barchart"
 import { Globe } from "@/components/ui/globe"
-// import { AnimatedBeam } from "@/components/ui/animated-beam"
 import React, { forwardRef, useRef } from "react"
 
 import { cn } from "@/lib/utils"
 import { AnimatedBeam } from "@/components/ui/animated-beam"
+import Image from "next/image";
 
 export default function FeaturesSection() {
   return (
@@ -191,18 +192,43 @@ Circle.displayName = "Circle"
       <div className="flex size-full max-h-[200px] max-w-lg flex-col items-stretch justify-between gap-10">
         <div className="flex flex-row items-center justify-between">
           <Circle ref={div1Ref}>
-            <Icons.googleDrive />
+          <Image
+  src="/shadcn.png"
+  alt="Shadcn UI"
+  width={20}
+  height={20}
+  className="h-7 w-10"
+/>
+            
           </Circle>
           <Circle ref={div5Ref}>
-            <Icons.googleDocs />
+                     <Image
+  src="/base.png"
+  alt="Base UI"
+  width={20}
+  height={20}
+  className="h-7 w-10"
+/>
           </Circle>
         </div>
         <div className="flex flex-row items-center justify-between">
           <Circle ref={div2Ref}>
-            <Icons.notion />
+                    <Image
+  src="/radix.png"
+  alt="Radix UI"
+  width={20}
+  height={20}
+  className="h-7 w-10"
+/>
           </Circle>
           <Circle ref={div4Ref} className="size-16">
-            <Icons.openai />
+                     <Image
+  src="/logo.png"
+  alt="CyberSpace Works"
+  width={20}
+  height={20}
+  className="h-10 w-10"
+/>
           </Circle>
           <Circle ref={div6Ref}>
             <Icons.zapier />
@@ -210,10 +236,22 @@ Circle.displayName = "Circle"
         </div>
         <div className="flex flex-row items-center justify-between">
           <Circle ref={div3Ref}>
-            <Icons.whatsapp />
+                     <Image
+  src="/tailwind.png"
+  alt="Tailwind"
+  width={20}
+  height={20}
+  className="h-7 w-10"
+/>
           </Circle>
           <Circle ref={div7Ref}>
-            <Icons.messenger />
+                     <Image
+  src="/css.jpg"
+  alt="CSS"
+  width={20}
+  height={20}
+  className="h-7 w-10"
+/>
           </Circle>
         </div>
       </div>

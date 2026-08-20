@@ -398,7 +398,7 @@ export default function SoftwareShowcase() {
           <CutoutCard
             label="Project Management Software"
             title="CyberProjects"
-            description="Payroll, attendance, leave and employee management platform."
+            description="Agile team workspace planner"
             tag="v2.4"
             accent="#0f766e"
               icon={<SquareKanban className="size-3" />}
@@ -408,7 +408,7 @@ export default function SoftwareShowcase() {
           <CutoutCard
             label="GST and Billing Software"
             title="CyberInvoice"
-            description="Barcode billing, GST invoicing and inventory management."
+            description="Fast GST billing & invoicing."
             tag="v4.0"
             accent="#0e7490"
               icon={<ReceiptIndianRupee className="size-3" />}
@@ -418,7 +418,7 @@ export default function SoftwareShowcase() {
           <CutoutCard
             label="Tally Software"
             title="CyberLedger"
-            description="Hospital ERP with billing, EMR and pharmacy integration."
+            description="Corporate financial bookkeeping."
             tag="v2.0"
             accent="#0369a1"
               icon={<NotebookTabs className="size-3" />}
@@ -427,7 +427,7 @@ export default function SoftwareShowcase() {
           <CutoutCard
             label="HR Management Software"
             title="CyberPayroll"
-            description="Hospital ERP with billing, EMR and pharmacy integration."
+            description="HR & payroll automation."
             tag="v2.0"
             accent="#1d4ed8"
               icon={<IdCardLanyard className="size-3" />}
@@ -440,7 +440,7 @@ export default function SoftwareShowcase() {
           <CutoutCard
             label="Store Management System"
             title="CyberRetail"
-            description="Payroll, attendance, leave and employee management platform."
+            description="Retail store POS platform."
             tag="v2.4"
             accent="#4338ca"
               icon={<ShoppingBag className="size-3" />}
@@ -450,7 +450,7 @@ export default function SoftwareShowcase() {
           <CutoutCard
             label="Clinic Management System"
             title="CyberClinic"
-            description="Barcode billing, GST invoicing and inventory management."
+            description="Patient & EMR management."
             tag="v4.0"
             accent="#6d28d9"
               icon={<Stethoscope className="size-3" />}
@@ -460,7 +460,7 @@ export default function SoftwareShowcase() {
           <CutoutCard
             label="Pharmacy Management System"
             title="CyberPharma"
-            description="Hospital ERP with billing, EMR and pharmacy integration."
+            description="Pharmacy inventory & billing."
             tag="v2.0"
             accent="#7e22ce"
               icon={<Pill className="size-3" />}
@@ -469,7 +469,7 @@ export default function SoftwareShowcase() {
           <CutoutCard
             label="Resturant Management System"
             title="CyberDine"
-            description="Hospital ERP with billing, EMR and pharmacy integration."
+            description="Cloud restaurant POS system."
             tag="v2.0"
             accent="#38bdf8"
               icon={<ChefHat className="size-3" />}

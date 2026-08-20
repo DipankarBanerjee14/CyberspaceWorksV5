@@ -21,16 +21,16 @@ const DEFAULT_GLOW_COLOR = '6, 182, 212';
 const MOBILE_BREAKPOINT = 768;
 
 const cardData = [
-  { color: '#120F17', title: 'Our Mission',     description: 'To empower businesses through innovative digital solutions that blend creativity, technology, and strategy—helping brands grow, connect, and succeed in the digital world.',        label: ''     },
-  { color: '#120F17', title: 'Our Vision',     description: 'To become a global leader in digital transformation, setting new standards in web, app, and software development through innovation, excellence, and client success.',       label: ''     },
-  { color: '#120F17', title: 'We combine innovation, design, and technology to create digital solutions that drive real results.', description: 'Our team of experts specializes in web, app, and software development—empowering businesses to grow smarter, faster, and stronger. With a focus on user experience, performance, and reliability, we turn complex challenges into seamless digital experiences that deliver measurable success.',    label: ''     },
-  { color: '#120F17', title: 'Providing Programming Solutions Under One Roof',    description: '',        label: ''  },
+  { color: '#27272a', title: 'Our Mission',     description: 'To empower businesses through innovative digital solutions that blend creativity, technology, and strategy—helping brands grow, connect, and succeed in the digital world.',        label: ''     },
+  { color: '#27272a', title: 'Our Vision',     description: 'To become a global leader in digital transformation, setting new standards in web, app, and software development through innovation, excellence, and client success.',       label: ''     },
+  { color: '#27272a', title: 'We combine innovation, design, and technology to create digital solutions that drive real results.', description: 'Our team of experts specializes in web, app, and software development—empowering businesses to grow smarter, faster, and stronger. With a focus on user experience, performance, and reliability, we turn complex challenges into seamless digital experiences that deliver measurable success.',    label: ''     },
+  { color: '#27272a', title: 'Providing Programming Solutions Under One Roof',    description: '',        label: ''  },
 
-  { color: '#120F17', title: 'We Organize All Your Scattered Ideas.',   description: '',      label: '' },
-  { color: '#120F17', title: 'We’re Borderless.',      description: '', label: ''   },
+  { color: '#27272a', title: 'We Organize All Your Scattered Ideas.',   description: '',      label: '' },
+  { color: '#27272a', title: 'We’re Borderless.',      description: '', label: ''   },
 
-  // { color: '#120F17', title: 'We organize all your Scattered Ideas.',   description: '',      label: '' },
-  // { color: '#120F17', title: '',      description: '', label: 'We’re Borderless.'   }
+  // { color: '#27272a', title: 'We organize all your Scattered Ideas.',   description: '',      label: '' },
+  // { color: '#27272a', title: '',      description: '', label: 'We’re Borderless.'   }
 
 ];
 

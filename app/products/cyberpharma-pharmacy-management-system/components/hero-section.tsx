@@ -83,7 +83,7 @@ export function HeroSection() {
         <div className="mx-auto max-w-4xl text-center">
           {/* Announcement Badge */}
           <div className="mb-8 flex justify-center">
-            <Badge variant="outline" className="mx-auto mb-10 max-w-2xl text-lg sm:text-xl">
+            <Badge variant="outline" className="mx-auto mb-10 max-w-2xl text-xs sm:text-sm font-light text-white">
 <span className="mr-2 inline-flex size-4 shrink-0 items-center justify-center">
   <Pill className="size-4 text-cyan-500" strokeWidth={3} />
 </span>
@@ -110,7 +110,7 @@ export function HeroSection() {
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
-            <Button variant="outline" size="lg" className="text-base cursor-pointer" asChild>
+            <Button variant="outline" size="lg" className="text-base cursor-pointer text-black dark:text-white" asChild>
               <a href="#contact">
                 <Play className="mr-2 h-4 w-4" />
                 Free Demo

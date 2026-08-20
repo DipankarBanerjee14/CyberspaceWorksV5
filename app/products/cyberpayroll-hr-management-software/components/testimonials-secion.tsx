@@ -95,11 +95,11 @@ const testimonials: Testimonial[] = [
 
 export function TestimonialsSection() {
   return (
-    <section id="testimonials" className="py-24 sm:py-32 bg-black">
+    <section id="testimonials" className="py-12 sm:py-16 bg-black">
       <div className="container mx-auto px-8 sm:px-6">
         {/* Section Header */}
         <div className="mx-auto max-w-2xl text-center mb-16">
-          <Badge variant="outline" className="mb-4">Testimonials</Badge>
+          <Badge variant="outline" className="mb-4 text-white">Testimonials</Badge>
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
             Empowering Innovation Worldwide
           </h2>
@@ -111,7 +111,7 @@ export function TestimonialsSection() {
         {/* Testimonials Masonry Grid */}
         <div className="columns-1 gap-4 md:columns-2 md:gap-6 lg:columns-3 lg:gap-4">
           {testimonials.map((testimonial, index) => (
-            <Card key={index} className="mb-6 break-inside-avoid shadow-none lg:mb-4">
+            <Card key={index} className="mb-6 break-inside-avoid shadow-none lg:mb-4 bg-zinc-900">
               <CardContent>
                 <div className="flex items-start gap-4">
                   <Avatar className="bg-muted size-12 shrink-0">
@@ -132,16 +132,16 @@ export function TestimonialsSection() {
 
                   <div className="min-w-0 flex-1">
                     <a href="#" onClick={e => e.preventDefault()} className="cursor-pointer">
-                      <h3 className="font-medium hover:text-primary transition-colors">{testimonial.name}</h3>
+                      <h3 className="font-medium hover:text-primary transition-colors text-white">{testimonial.name}</h3>
                     </a>
-                    <span className="text-muted-foreground block text-sm tracking-wide">
+                    <span className="text-zinc-400 block text-sm tracking-wide">
                       {testimonial.role}
                     </span>
                   </div>
                 </div>
 
                 <blockquote className="mt-4">
-                  <p className="text-sm leading-relaxed text-balance">{testimonial.quote}</p>
+                  <p className="text-sm leading-relaxed text-balance text-white">{testimonial.quote}</p>
                 </blockquote>
               </CardContent>
             </Card>

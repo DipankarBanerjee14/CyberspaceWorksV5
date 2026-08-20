@@ -12,7 +12,7 @@ import SparkleNavbar from '@/components/lightswind/sparkle-navbar'
 
 export function HeroSection() {
   return (
-    <section id="hero" className="relative overflow-hidden bg-black  pt-16 sm:pt-20 pb-16">
+    <section id="hero" className="relative overflow-hidden bg-black  pt-8 sm:pt-12 pb-8">
       {/* Background Pattern */}
       <div className="absolute inset-0">
         {/* Dot pattern overlay using reusable component */}
@@ -81,9 +81,9 @@ export function HeroSection() {
 </div>
       <div className="container mx-auto  mt-7 px-4 sm:px-6 lg:px-8 relative">
         <div className="mx-auto max-w-4xl text-center">
-          {/* Announcement Badge */}
-           <div className="mb-8 flex justify-center">
-            <Badge variant="outline" className="mx-auto mb-10 max-w-2xl text-lg sm:text-xl">
+             {/* Announcement Badge */}
+           <div className="mb-8 flex justify-center mt-20">
+            <Badge variant="outline" className="mx-auto mb-10 max-w-2xl text-xs sm:text-sm font-light text-white">
 <span className="mr-2 inline-flex size-4 shrink-0 items-center justify-center">
   <SquareKanban className="size-4 text-cyan-500" strokeWidth={3} />
 </span>
@@ -91,14 +91,13 @@ export function HeroSection() {
               {/* <ArrowRight className="w-3 h-3 ml-2" /> */}
             </Badge>
           </div>
-
           {/* Main Headline */}
-          <h1 className="mb-6 text-4xl font-mono tracking-tight sm:text-6xl lg:text-7xl">
+          <h1 className="mb-6 text-4xl font-mono tracking-tight sm:text-6xl lg:text-7xl text-white">
             Centralize Teams, Milestones, and Development Sprints
           </h1>
 
           {/* Subheading */}
-          <p className="mx-auto mb-10 max-w-2xl text-lg  sm:text-xl">
+          <p className="mx-auto mb-10 max-w-2xl text-lg sm:text-xl text-white">
             Eliminate task chaos. Track deep-tech delivery cycles, handle multi-vendor dependencies, and coordinate team performance in a highly scannable dashboard.
           </p>
 
@@ -110,7 +109,7 @@ export function HeroSection() {
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
-            <Button variant="outline" size="lg" className="text-base cursor-pointer" asChild>
+            <Button variant="outline" size="lg" className="text-base cursor-pointer text-black dark:text-white" asChild>
               <a href="#contact">
                 <Play className="mr-2 h-4 w-4" />
                 Free Demo

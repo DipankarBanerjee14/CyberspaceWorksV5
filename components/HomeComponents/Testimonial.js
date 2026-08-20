@@ -133,7 +133,7 @@ export default function Testimonials() {
   const swiperRef = useRef(null);
 
   return (
-    <section className="relative text-black px-6 py-5 overflow-hidden">
+    <section className="relative text-white px-6 py-5 overflow-hidden">
       <div className="max-w-7xl mx-auto">
         {/* 🪄 Animated Title - comes from left */}
         <motion.h2
@@ -188,14 +188,14 @@ export default function Testimonials() {
                   }}
                 >
                   <div
-                    className={`h-[250px] bg-cyan-400/80 backdrop-blur-xl border border-white/10 rounded-xl p-4 relative overflow-hidden transition-all duration-300 ${
+                    className={`h-[250px] bg-zinc-900 backdrop-blur-xl border border-white/10 rounded-xl p-4 relative overflow-hidden transition-all duration-300 ${
                       isActive
                         ? "flex flex-row gap-4 items-start"
                         : "flex flex-col items-center justify-center mb-10"
                     } group`}
                   >
                     {/* Avatar + Name */}
-                    <div className="w-1/2 h-full flex flex-col items-center justify-center text-center text-black">
+                    <div className="w-1/2 h-full flex flex-col items-center justify-center text-center text-white">
                       <Image
                         src={item.avatar}
                         alt={`${item.firstname} ${item.lastname}`}
@@ -209,8 +209,8 @@ export default function Testimonials() {
 
                     {/* Testimonial */}
                     {isActive && (
-                      <div className="w-1/2 relative flex items-center justify-center text-center text-sm h-full px-4 text-black">
-                        <div className="absolute text-[10rem] sm:text-[14rem] text-black/10 pointer-events-none select-none leading-none">
+                      <div className="w-1/2 relative flex items-center justify-center text-center text-sm h-full px-4 text-white">
+                        <div className="absolute text-[10rem] sm:text-[14rem] text-white/10 pointer-events-none select-none leading-none">
                           &ldquo;
                         </div>
                         <p className="relative z-10 max-w-[90%]">

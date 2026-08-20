@@ -132,7 +132,7 @@ function updateStars() {
         }}
         viewport={{ once: true, amount: 0.6 }} // triggers once when 60% visible
       >
-        <span className="text-4xl  md:text-7xl font-medium ">
+        <span className="text-4xl md:text-7xl font-medium text-gray-200">
           Discover Endless Possibilities <br/>
           in the{" "}
           <span className="text-cyan-400 text-4xl md:text-7xl font-medium drop-shadow-[0_0_15px_rgba(59,130,246,0.8)]">

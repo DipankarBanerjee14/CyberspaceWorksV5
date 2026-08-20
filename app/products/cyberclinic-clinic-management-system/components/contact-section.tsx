@@ -81,11 +81,11 @@ export function ContactSection() {
   }
 
   return (
-    <section id="contact" className="py-24 sm:py-32 bg-black">
+    <section id="contact" className="py-12 sm:py-16 bg-black">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center mb-16">
-          <Badge variant="outline" className="mb-4">Get In Touch</Badge>
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
+          <Badge variant="outline" className="mb-4 text-white">Get In Touch</Badge>
+          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4 text-white">
             Need help or have suggestion or questions?
           </h2>
           {/* <p className="text-lg text-muted-foreground">
@@ -94,71 +94,13 @@ export function ContactSection() {
         </div>
 
         <div className="grid gap-8 lg:grid-cols-1">
-          {/* Contact Options */}
-          {/* <div className="space-y-6 order-2 lg:order-1">
-            <Card className="hover:shadow-md transition-shadow cursor-pointer">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <MessageCircle className="h-5 w-5 text-primary" />
-                  Discord Community
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-3">
-                  Join our active community for quick help and discussions with other developers.
-                </p>
-                <Button variant="outline" size="sm" className="cursor-pointer" asChild>
-                  <a href="https://discord.com/invite/XEQhPc9a6p" target="_blank" rel="noopener noreferrer">
-                    Join Discord
-                  </a>
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card className="hover:shadow-md transition-shadow cursor-pointer">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Github className="h-5 w-5 text-primary" />
-                  GitHub Issues
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-3">
-                  Report bugs, request features, or contribute to our open source repository.
-                </p>
-                <Button variant="outline" size="sm" className="cursor-pointer" asChild>
-                  <a href="https://github.com/silicondeck/shadcn-dashboard-landing-template/issues" target="_blank" rel="noopener noreferrer">
-                    View on GitHub
-                  </a>
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card className="hover:shadow-md transition-shadow cursor-pointer">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <BookOpen className="h-5 w-5 text-primary" />
-                  Documentation
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-3">
-                  Browse our comprehensive guides, tutorials, and component documentation.
-                </p>
-                <Button variant="outline" size="sm" className="cursor-pointer" asChild>
-                  <a href="#">
-                    View Docs
-                  </a>
-                </Button>
-              </CardContent>
-            </Card>
-          </div> */}
+          {/* Contact Options removed */}
 
           {/* Contact Form */}
           <div className="lg:col-span-2 order-1 lg:order-2">
-            <Card>
+            <Card className="bg-zinc-900">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-white">
                   <Mail className="h-5 w-5" />
                   Send us a message
                 </CardTitle>
@@ -265,7 +207,7 @@ export function ContactSection() {
                         </FormItem>
                       )}
                     />
-                    <Button type="submit" className="w-full cursor-pointer">
+                    <Button type="submit" className="w-full cursor-pointer bg-white text-black hover:bg-gray-200">
                       Send Message
                     </Button>
                   </form>
