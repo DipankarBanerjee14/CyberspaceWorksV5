@@ -1,8 +1,8 @@
 import * as React from "react"
-import { Controller, FormProvider, useFormContext } from "react-hook-form"
+import { Controller, FormProvider, useFormContext, type FieldValues } from "react-hook-form"
 
-export function Form({ children, ...props }: React.ComponentProps<typeof FormProvider>) {
-  return <FormProvider {...props}>{children}</FormProvider>
+export function Form<T extends FieldValues>({ children, ...props }: React.ComponentProps<typeof FormProvider<T>>) {
+  return <FormProvider<T> {...(props as React.ComponentProps<typeof FormProvider<T>>)}>{children}</FormProvider>
 }
 
 export function FormField({ name, control, render, ...props }: any) {

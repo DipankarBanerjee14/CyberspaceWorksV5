@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, useMemo } from "react"
 
-const ChatUnreadContext = createContext({ totalUnread: 0, setTotalUnread: function() {} })
+const ChatUnreadContext = createContext({ totalUnread: 0, setTotalUnread: (/** @type {number} */ _n) => {} })
 
 export function ChatUnreadProvider({ children }) {
   const [totalUnread, setTotalUnread] = useState(0)
