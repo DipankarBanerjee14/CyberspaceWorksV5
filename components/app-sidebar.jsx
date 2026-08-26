@@ -16,6 +16,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { LayoutDashboardIcon, FolderIcon, KanbanSquare, MessageSquareIcon, TicketIcon, UsersIcon, FileTextIcon, ReceiptIcon, WalletCards, Handshake, UserCogIcon, CalendarIcon, BookA, CalendarClock, Table2,FileUser, ShoppingCart } from "lucide-react"
+import { useChatUnread } from "@/context/ChatUnreadContext"
 
 export function AppSidebar({
   role,
@@ -24,6 +25,7 @@ export function AppSidebar({
   ...props
 }) {
   const { state } = useSidebar()
+  const { totalUnread } = useChatUnread()
   const normalizedRole = typeof role === "string" ? role.toLowerCase() : "client"
   const businessName = business?.businessName || "Project Management"
   const businessLogoUrl = business?.logoUrl || ""
@@ -50,7 +52,13 @@ export function AppSidebar({
         ? scopedPath("attendance")
         : null
 
-  const messagesPath = isVendor ? "/dashboard/vendor/messages" : "/dashboard/messages"
+  const messagesPath = isVendor
+    ? "/dashboard/vendor/messages"
+    : normalizedRole === "client"
+      ? scopedPath("messages")
+      : normalizedRole === "employee"
+        ? scopedPath("messages")
+        : "/dashboard/messages"
   const schedulePath = isVendor ? "/dashboard/vendor/schedule" : "/schedule"
   const ticketsPath = isVendor ? "/dashboard/vendor/tickets" : "/dashboard/tickets"
   const kanbanPath =
@@ -84,7 +92,7 @@ export function AppSidebar({
       {
         label: "Connect",
         items: [
-          { title: "Messages", url: messagesPath, icon: <MessageSquareIcon /> },
+          { title: "Messages", url: messagesPath, icon: <MessageSquareIcon />, unreadCount: totalUnread },
           { title: "Schedule", url: schedulePath, icon: <CalendarIcon /> },
         ],
       },
@@ -135,7 +143,7 @@ export function AppSidebar({
       {
         label: "Connect",
         items: [
-          { title: "Messages", url: messagesPath, icon: <MessageSquareIcon /> },
+          { title: "Messages", url: messagesPath, icon: <MessageSquareIcon />, unreadCount: totalUnread },
           { title: "Schedule", url: schedulePath, icon: <CalendarIcon /> },
         ],
       },
@@ -162,6 +170,13 @@ export function AppSidebar({
         items: [
           { title: "Projects", url: projectsPath, icon: <FolderIcon /> },
           { title: "Kanban", url: kanbanPath, icon: <KanbanSquare /> },
+        ],
+      },
+      {
+        label: "Connect",
+        items: [
+          { title: "Messages", url: messagesPath, icon: <MessageSquareIcon />, unreadCount: totalUnread },
+          { title: "Schedule", url: schedulePath, icon: <CalendarIcon /> },
         ],
       },
       {
@@ -192,6 +207,12 @@ export function AppSidebar({
         items: [
           { title: "Projects", url: projectsPath, icon: <FolderIcon /> },
           { title: "Kanban", url: kanbanPath, icon: <KanbanSquare /> },
+        ],
+      },
+      {
+        label: "Connect",
+        items: [
+          { title: "Messages", url: messagesPath, icon: <MessageSquareIcon />, unreadCount: totalUnread },
         ],
       },
       {

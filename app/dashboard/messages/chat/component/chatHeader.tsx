@@ -459,6 +459,9 @@ export function ChatHeader({
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
             <h2 className="font-semibold truncate dark:text-white">{conversation.name}</h2>
+            {conversation.unreadCount > 0 && (
+              <span className="h-2.5 w-2.5 rounded-full bg-red-500 flex-shrink-0" />
+            )}
             {conversation.isMuted && (
               <BellOff className="h-4 w-4 text-muted-foreground" />
             )}

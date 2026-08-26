@@ -37,7 +37,7 @@ export function CTASection() {
                   Ready to turn your kitchen into a
                   <span className='flex sm:inline-flex justify-center'>
                     <span className='relative mx-2'>
-                      <span className='bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent'>
+                      <span className='bg-gradient-to-r from-white to-cyan-400 bg-clip-text text-transparent'>
                         high-efficiency
                       </span>
                       <div className='absolute start-0 -bottom-2 h-1 w-full bg-gradient-to-r from-primary/30 to-secondary/30' />

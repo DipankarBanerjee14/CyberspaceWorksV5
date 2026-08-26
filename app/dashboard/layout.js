@@ -70,6 +70,7 @@ import { requireAuth } from "@/lib/auth";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { DashboardProviders } from "@/components/dashboard-providers";
 import BusinessSettings from "@/lib/models/BusinessSettings";
 
 export default async function DashboardLayout({ children }) {
@@ -96,6 +97,7 @@ export default async function DashboardLayout({ children }) {
 
   return (
     <section className="min-h-">
+      <DashboardProviders>
       <SidebarProvider
         style={{
           "--sidebar-width": "calc(var(--spacing) * 72)",
@@ -123,6 +125,7 @@ export default async function DashboardLayout({ children }) {
           </div>
         </SidebarInset>
       </SidebarProvider>
+      </DashboardProviders>
     </section>
   );
 }

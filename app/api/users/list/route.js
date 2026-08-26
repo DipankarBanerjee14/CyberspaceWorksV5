@@ -24,14 +24,36 @@ export async function GET() {
     if (current.role === "admin") {
       users = await User.find({ _id: { $ne: current._id } });
     } else if (current.role === "employee") {
-      users = await User.find({
-        role: { $in: ["admin", "employee", "vendor"] },
-        _id: { $ne: current._id },
-      });
+      // Managers and Customer Agents can chat with clients; other employees cannot
+      if (["Manager", "Customer Agent"].includes(current.employeeRole)) {
+        users = await User.find({
+          _id: { $ne: current._id },
+          $or: [
+            { role: "admin" },
+            { role: "employee" },
+            { role: "vendor" },
+            { role: "client" },
+          ],
+        });
+      } else {
+        users = await User.find({
+          role: { $in: ["admin", "employee", "vendor"] },
+          _id: { $ne: current._id },
+        });
+      }
     } else if (current.role === "vendor") {
       users = await User.find({
         role: { $in: ["admin", "vendor"] },
         _id: { $ne: current._id },
+      });
+    } else if (current.role === "client") {
+      // Client can message admin + managers/customer agents only
+      users = await User.find({
+        _id: { $ne: current._id },
+        $or: [
+          { role: "admin" },
+          { role: "employee", employeeRole: { $in: ["Manager", "Customer Agent"] } },
+        ],
       });
     } else {
       users = await User.find({
@@ -54,6 +76,7 @@ export async function GET() {
           name: userObj.name,
           email: userObj.email,
           role: userObj.role,
+          employeeRole: userObj.employeeRole || null,
           unread,
         };
       })

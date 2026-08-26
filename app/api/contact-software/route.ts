@@ -9,14 +9,14 @@ export async function POST(req: Request) {
       service: "gmail",
 
       auth: {
-        user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASS,
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
       },
     })
 
     // Mail to user
     await transporter.sendMail({
-      from: process.env.MAIL_USER,
+      from: process.env.EMAIL_USER,
 
       to: body.email,
 
@@ -33,9 +33,9 @@ export async function POST(req: Request) {
 
     // Mail to owner
     await transporter.sendMail({
-      from: process.env.MAIL_USER,
+      from: process.env.EMAIL_USER,
 
-      to: process.env.OWNER_EMAIL,
+      to: process.env.OWNER_EMAIL_SOFTWARE,
 
       subject: "New Contact Form Submission",
 

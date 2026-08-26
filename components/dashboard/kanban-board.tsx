@@ -550,11 +550,10 @@ export function KanbanBoard() {
   const [newColumnTitle, setNewColumnTitle] = React.useState("")
   const [addingColumn, setAddingColumn] = React.useState(false)
 
-  // columnsRef always mirrors `columns` so drag handlers never read stale state
+  // columnsRef mirrors `columns` synchronously so drag handlers never read stale state
+  // IMPORTANT: assign synchronously during render, not in useEffect (which is async after paint)
   const columnsRef = React.useRef<KanbanColumn[]>(columns)
-  React.useEffect(() => {
-    columnsRef.current = columns
-  }, [columns])
+  columnsRef.current = columns
 
   // active drag state
   const [activeTask, setActiveTask] = React.useState<{
@@ -579,15 +578,15 @@ export function KanbanBoard() {
   // Guard against duplicate in-flight PATCHes for the same drag gesture
   const dragPatchInFlight = React.useRef(false)
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // FIX (core): We store the task's ORIGINAL column at drag-start, so that
-  // handleDragEnd always knows the DB-persisted column to PATCH from/to.
-  // After dragOver moves the task visually, columnsRef is updated — but we
-  // still need the *destination* column. We resolve it from columnsRef at
-  // drag-end time (after all dragOver mutations have settled), not from the
-  // stale `over.data.current?.columnId` which is frozen at drag-start.
-  // ─────────────────────────────────────────────────────────────────────────────
+  // Store the task's ORIGINAL column at drag-start so handleDragEnd knows the
+  // DB-persisted source column for the PATCH.
   const dragOriginColumnId = React.useRef<string>("")
+
+  // Track the ACTUAL destination column during handleDragOver. Because
+  // columnsRef is synced via useEffect (async, after paint), it can be stale
+  // when handleDragEnd fires. This ref is updated synchronously inside the
+  // handleDragOver setColumns updater so it is always current.
+  const dragOverDestinationColumnId = React.useRef<string>("")
 
   React.useEffect(() => { setMounted(true) }, [])
 
@@ -651,6 +650,7 @@ export function KanbanBoard() {
       setActiveColumn(col ?? null)
       setActiveTask(null)
       dragOriginColumnId.current = ""
+      dragOverDestinationColumnId.current = ""
       return
     }
 
@@ -660,9 +660,9 @@ export function KanbanBoard() {
       const task = col?.tasks.find((t) => t.id === event.active.id)
       if (task) {
         setActiveTask({ task, columnId })
-        // FIX: record where the task started so dragEnd can compute the right destination
         dragOriginColumnId.current = columnId
       }
+      dragOverDestinationColumnId.current = ""
       setActiveColumn(null)
     }
   }
@@ -676,13 +676,7 @@ export function KanbanBoard() {
     const activeType = active.data.current?.type
     if (activeType !== "task") return
 
-    // FIX: always read from columnsRef — never from stale `active.data.current.columnId`
-    // After the first dragOver fires and moves the task, the data attached to the
-    // active item no longer reflects the current column. Use columnsRef instead.
     const latestColumns = columnsRef.current
-    const activeColNow = findColumnByTaskId(latestColumns, String(active.id))
-    if (!activeColNow) return
-
     const overType = over.data.current?.type
     const overColumnId: string =
       overType === "task"
@@ -694,17 +688,27 @@ export function KanbanBoard() {
         : ""
 
     if (!overColumnId) return
-    if (activeColNow.id === overColumnId) return // same column — handled in dragEnd
+
+    const activeColNow = findColumnByTaskId(latestColumns, String(active.id))
+    if (!activeColNow) return
+    if (activeColNow.id === overColumnId) return
+
+    // Record destination synchronously so handleDragEnd can persist correctly
+    dragOverDestinationColumnId.current = overColumnId
 
     setColumns((current) => {
+      // Double-check inside updater using current state (defensive)
+      const liveActiveCol = findColumnByTaskId(current, String(active.id))
+      if (!liveActiveCol || liveActiveCol.id === overColumnId) return current
+
       const next = current.map((col) => ({ ...col, tasks: [...col.tasks] }))
 
-      const sourceCol = next.find((c) => c.id === activeColNow.id)
+      const sourceCol = next.find((c) => c.id === liveActiveCol.id)
       const destCol = next.find((c) => c.id === overColumnId)
       if (!sourceCol || !destCol) return current
 
       const activeIndex = sourceCol.tasks.findIndex((t) => t.id === active.id)
-      if (activeIndex === -1) return current // already moved
+      if (activeIndex === -1) return current
 
       const [movedTask] = sourceCol.tasks.splice(activeIndex, 1)
       if (!movedTask) return current
@@ -765,20 +769,45 @@ export function KanbanBoard() {
     // ── Task drop ───────────────────────────────────────────────────────────
     if (activeType !== "task") return
 
-    // FIX: resolve the destination column from columnsRef AFTER all dragOver
-    // mutations have already settled — this is the actual column the task is in now.
-    const latestColumns = columnsRef.current
-    const destinationCol = findColumnByTaskId(latestColumns, String(active.id))
-    if (!destinationCol) return
-
-    const finalColumnId = destinationCol.id
     const originColumnId = dragOriginColumnId.current
+
+    // Resolve destination: prefer the synchronously-tracked over-destination,
+    // fallback to deriving from `over` data, finally scan columnsRef.
+    let finalColumnId = dragOverDestinationColumnId.current
+    if (!finalColumnId) {
+      const overType = over.data.current?.type
+      if (overType === "task") {
+        finalColumnId = (over.data.current?.columnId as string) || ""
+      } else if (overType === "column") {
+        finalColumnId = String(over.id)
+      } else if (isKnownColumnId(columnsRef.current, String(over.id))) {
+        finalColumnId = String(over.id)
+      } else {
+        // Last resort: where is the task currently in our (now synchronous) ref
+        const destCol = findColumnByTaskId(columnsRef.current, String(active.id))
+        finalColumnId = destCol?.id || ""
+      }
+    }
+
+    // If still no destination or task not found, clear refs and bail
+    if (!finalColumnId) {
+      dragOriginColumnId.current = ""
+      dragOverDestinationColumnId.current = ""
+      return
+    }
+
+    // If task is a local optimistic one (fake id), don't hit server — keep local state
+    const isOptimisticId = String(active.id).startsWith("task-")
 
     // ── Same-column reorder ─────────────────────────────────────────────────
     if (finalColumnId === originColumnId) {
       // dragOver doesn't handle same-column reorder — do it here
       const overType = over.data.current?.type
-      if (overType !== "task" || active.id === over.id) return
+      if (overType !== "task" || active.id === over.id) {
+        dragOriginColumnId.current = ""
+        dragOverDestinationColumnId.current = ""
+        return
+      }
 
       setColumns((current) => {
         const next = current.map((col) => ({ ...col, tasks: [...col.tasks] }))
@@ -793,12 +822,20 @@ export function KanbanBoard() {
         col.tasks = arrayMove(col.tasks, fromIndex, toIndex)
         return next
       })
+      dragOriginColumnId.current = ""
+      dragOverDestinationColumnId.current = ""
       // Same-column reorder — no PATCH needed (order within a column isn't persisted)
       return
     }
 
     // ── Cross-column: dragOver already updated local state visually ─────────
-    // Now persist the new columnId to the server.
+    // Now persist the new columnId to the server (skip for optimistic ids).
+    if (isOptimisticId) {
+      dragOriginColumnId.current = ""
+      dragOverDestinationColumnId.current = ""
+      return
+    }
+
     if (dragPatchInFlight.current) return
     dragPatchInFlight.current = true
 
@@ -809,15 +846,12 @@ export function KanbanBoard() {
           headers: { "Content-Type": "application/json" },
           credentials: "include",
           body: JSON.stringify({
-            // FIX: send the task id and the RESOLVED destination columnId from
-            // columnsRef — NOT from over.data.current which is frozen at drag-start
             id: String(active.id),
             columnId: finalColumnId,
           }),
         })
 
         if (res.ok) {
-          // Refresh from server to confirm persistence (don't re-apply visually)
           const cols = await fetchColumns()
           if (cols) setColumns(cols)
         } else {
@@ -832,6 +866,7 @@ export function KanbanBoard() {
       } finally {
         dragPatchInFlight.current = false
         dragOriginColumnId.current = ""
+        dragOverDestinationColumnId.current = ""
       }
     })()
   }
@@ -863,28 +898,26 @@ export function KanbanBoard() {
       if (res.ok) {
         const cols = await fetchColumns()
         if (cols) { setColumns(cols); return }
+        // if fetchColumns failed but POST succeeded, still show success without optimistic
+        return
       }
-    } catch { /* fallthrough */ }
 
-    // Optimistic local update as fallback
-    setColumns((current) =>
-      current.map((col) =>
-        col.id === columnId
-          ? {
-              ...col,
-              tasks: [
-                ...col.tasks,
-                {
-                  ...task,
-                  id: `task-${crypto.randomUUID()}`,
-                  createdByName: (session as any)?.user?.name ?? "",
-                  createdById: (session as any)?.user?.id ?? "",
-                },
-              ],
-            }
-          : col
-      )
-    )
+      // Server returned error — surface it instead of silently faking success
+      let errMsg = `Failed to save task (HTTP ${res.status})`
+      try {
+        const errJson: any = await res.json()
+        console.error("Kanban POST failed:", res.status, errJson)
+        if (errJson?.error || errJson?.details) {
+          errMsg = `${errJson.error || ""} ${errJson.details ? JSON.stringify(errJson.details) : ""} ${errJson.stack ? String(errJson.stack).slice(0,500) : ""}`.trim()
+        }
+      } catch {}
+      window.alert(errMsg)
+      return
+    } catch (e) {
+      console.error("Kanban POST network error:", e)
+      window.alert(`Network error saving task: ${String(e)}`)
+      return
+    }
   }
 
   async function addColumn() {

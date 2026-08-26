@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useMemo } from "react"
 import { format, isToday, isYesterday } from "date-fns"
 import { CheckCheck, MoreHorizontal, Reply, Copy, Trash2 } from "lucide-react"
 
@@ -30,31 +30,41 @@ export function MessageList({ messages, users, currentUserId = "current-user" }:
   const isInitialLoadRef = useRef(true)
   const previousConversationRef = useRef<string | null>(null)
 
+  // Deduplicate by id to prevent React duplicate key warnings when server
+  // double-emits or optimistic+socket echo yields same _id
+  const dedupedMessages = useMemo(() => {
+    const seen = new Map<string, Message>()
+    for (const m of messages) {
+      if (!seen.has(m.id)) seen.set(m.id, m)
+    }
+    return Array.from(seen.values())
+  }, [messages])
+
   // Reset scroll behavior when switching conversations
   useEffect(() => {
-    const currentConversationId = messages.length > 0 ? messages[0]?.id?.split('-')[0] : null
+    const currentConversationId = dedupedMessages.length > 0 ? dedupedMessages[0]?.id?.split('-')[0] : null
     if (currentConversationId !== previousConversationRef.current) {
       isInitialLoadRef.current = true
       previousConversationRef.current = currentConversationId
     }
-  }, [messages])
+  }, [dedupedMessages])
 
   // Auto-scroll to bottom only when new messages are added (not on initial load)
   useEffect(() => {
     // Skip auto-scroll on initial load
     if (isInitialLoadRef.current) {
       isInitialLoadRef.current = false
-      previousMessageCountRef.current = messages.length
+      previousMessageCountRef.current = dedupedMessages.length
       return
     }
 
     // Only auto-scroll if new messages were added
-    if (messages.length > previousMessageCountRef.current && bottomRef.current) {
+    if (dedupedMessages.length > previousMessageCountRef.current && bottomRef.current) {
       bottomRef.current.scrollIntoView({ behavior: "smooth" })
     }
 
-    previousMessageCountRef.current = messages.length
-  }, [messages])
+    previousMessageCountRef.current = dedupedMessages.length
+  }, [dedupedMessages])
 
   const getUserById = (userId: string) => {
     if (userId === currentUserId) {
@@ -83,26 +93,26 @@ export function MessageList({ messages, users, currentUserId = "current-user" }:
     }
   }
 
-  const shouldShowAvatar = (message: Message, index: number) => {
+  const shouldShowAvatar = (message: Message, index: number, list: Message[]) => {
     if (message.senderId === currentUserId) return false
     if (index === 0) return true
 
-    const prevMessage = messages[index - 1]
+    const prevMessage = list[index - 1]
     return prevMessage.senderId !== message.senderId
   }
 
-  const shouldShowName = (message: Message, index: number) => {
+  const shouldShowName = (message: Message, index: number, list: Message[]) => {
     if (message.senderId === currentUserId) return false
     if (index === 0) return true
 
-    const prevMessage = messages[index - 1]
+    const prevMessage = list[index - 1]
     return prevMessage.senderId !== message.senderId
   }
 
-  const isConsecutiveMessage = (message: Message, index: number) => {
+  const isConsecutiveMessage = (message: Message, index: number, list: Message[]) => {
     if (index === 0) return false
 
-    const prevMessage = messages[index - 1]
+    const prevMessage = list[index - 1]
     const timeDiff = new Date(message.timestamp).getTime() - new Date(prevMessage.timestamp).getTime()
 
     return prevMessage.senderId === message.senderId && timeDiff < 5 * 60 * 1000 // 5 minutes
@@ -139,7 +149,7 @@ export function MessageList({ messages, users, currentUserId = "current-user" }:
     }
   }
 
-  const messageGroups = groupMessagesByDay(messages)
+  const messageGroups = groupMessagesByDay(dedupedMessages)
 
   return (
     <ScrollArea className="flex-1 min-w-0 px-4 text-black overflow-x-hidden overflow-y-auto dark:text-white" ref={scrollAreaRef} >
@@ -164,13 +174,13 @@ export function MessageList({ messages, users, currentUserId = "current-user" }:
               {group.messages.map((message, messageIndex) => {
                 const user = getUserById(message.senderId)
                 const isOwnMessage = message.senderId === currentUserId
-                const showAvatar = shouldShowAvatar(message, messageIndex)
-                const showName = shouldShowName(message, messageIndex)
-                const isConsecutive = isConsecutiveMessage(message, messageIndex)
+                const showAvatar = shouldShowAvatar(message, messageIndex, group.messages)
+                const showName = shouldShowName(message, messageIndex, group.messages)
+                const isConsecutive = isConsecutiveMessage(message, messageIndex, group.messages)
 
                 return (
                   <div
-                    key={message.id}
+                    key={`${message.id}-${message.timestamp}-${messageIndex}`}
                     className={cn(
                       "flex w-full items-start group",
                       isOwnMessage ? "justify-end" : "justify-start"

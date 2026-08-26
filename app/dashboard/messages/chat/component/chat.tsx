@@ -18,6 +18,7 @@ import {
   type Message,
   type User,
 } from "../use-chat"
+import { useChatUnread } from "@/context/ChatUnreadContext"
 
 interface ChatProps {
   conversations: Conversation[]
@@ -39,6 +40,7 @@ export function Chat({
       initialConversations={conversations}
       initialMessages={messages}
       initialUsers={users}
+      currentUserId={currentUserId}
     >
       <ChatInner
         conversations={conversations}
@@ -65,11 +67,16 @@ function ChatInner({
     currentMessagesByConversation,
     currentUsers,
     addMessage,
+    markConversationRead,
+    totalUnread,
     toggleMute,
     removeConversation,
     messageSearchQuery,
     setMessageSearchQuery,
   } = useChat()
+
+  const { setTotalUnread } = useChatUnread()
+  const [socketInstance, setSocketInstance] = useState<any>(null)
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [isMessageSearchOpen, setIsMessageSearchOpen] = useState(false)
@@ -125,6 +132,8 @@ function ChatInner({
     socket.on("receive-message", (payload) => {
       const senderId = payload?.sender?.toString?.() || payload?.senderId || payload?.sender || ""
       const receiverId = payload?.receiver?.toString?.() || payload?.receiverId || payload?.receiver || ""
+      // Ignore echo of own message — sender already added it optimistically via HTTP
+      if (senderId && currentUserId && senderId === currentUserId) return
       const conversationId = senderId === currentUserId ? receiverId : senderId
 
       if (!conversationId) return
@@ -145,6 +154,16 @@ function ChatInner({
 
       addMessage(conversationId, message)
     })
+
+    socket.on("messages-read", (payload) => {
+      // The reader opened our conversation — clear any unread indicator if needed
+      const readerId = payload?.readerId
+      if (readerId) {
+        // Could be used to show "seen" status on sent messages
+      }
+    })
+
+    setSocketInstance(socket)
 
     return () => {
       socket.off("receive-message")
@@ -174,6 +193,27 @@ function ChatInner({
     }
   }, [])
 
+  // Sync totalUnread to global sidebar context
+  useEffect(() => {
+    setTotalUnread(totalUnread)
+  }, [totalUnread, setTotalUnread])
+
+  // Mark conversation as read when selected
+  useEffect(() => {
+    if (!selectedConversation) return
+    const conv = currentConversations.find((c) => c.id === selectedConversation)
+    if (conv && conv.unreadCount > 0) {
+      markConversationRead(selectedConversation)
+      // Notify sender via socket that messages were read
+      if (socketInstance && currentUserId) {
+        socketInstance.emit("messages-read", {
+          readerId: currentUserId,
+          senderId: selectedConversation,
+        })
+      }
+    }
+  }, [selectedConversation, currentConversations, markConversationRead, socketInstance, currentUserId])
+
   const activeConversation = currentConversations.find((conversation) => conversation.id === selectedConversation) || null
   const currentMessages = selectedConversation ? currentMessagesByConversation[selectedConversation] || [] : []
   const filteredMessages = messageSearchQuery.trim()
@@ -189,7 +229,7 @@ function ChatInner({
       id: `msg-${Date.now()}`,
       content,
       timestamp: new Date().toISOString(),
-      senderId: "current-user",
+      senderId: currentUserId || "current-user",
       type: "text",
       isEdited: false,
       reactions: [],
@@ -200,6 +240,7 @@ function ChatInner({
       ? await onSendMessageApi(selectedConversation, content)
       : null
 
+    // Use persisted id when available; dedup in addMessage handles any socket echo
     addMessage(selectedConversation, persisted || fallbackMessage)
   }
 

@@ -4,8 +4,8 @@ import { NextResponse } from "next/server";
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: process.env.MAIL_USER,
-    pass: process.env.MAIL_PASS,
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
   },
 });
 
@@ -39,8 +39,8 @@ export async function POST(request) {
 
     // 1. Send enquiry to admin
     await transporter.sendMail({
-      from: `"Website Enquiry" <${process.env.MAIL_USER}>`,
-      to: process.env.MAIL_USER,
+      from: `"Website Enquiry" <${process.env.EMAIL_USER}>`,
+      to: process.env.EMAIL_USER,
       replyTo: email,
       subject: `New Quick Enquiry from ${name}`,
       html: `
@@ -60,7 +60,7 @@ export async function POST(request) {
 
     // 2. Send confirmation email to customer
     await transporter.sendMail({
-      from: `"CYBERSPACE WORKS" <${process.env.MAIL_USER}>`,
+      from: `"CYBERSPACE WORKS" <${process.env.EMAIL_USER}>`,
       to: email,
       subject: "Thank you for your enquiry",
       html: `

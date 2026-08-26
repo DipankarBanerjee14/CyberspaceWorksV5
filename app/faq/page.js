@@ -7,7 +7,7 @@ export default function FAQPage() {
   const faqs = useMemo(
     () => [
       { q: "What services does CSW offer?", a: "We provide Web Development, App Development, Software Development, UI/UX Design, Digital Marketing, Graphic Design, and Research & Analytics services." },
-      { q: "How can I contact CSW?", a: "You can contact us via email at info@csw.com or through our contact form on the website." },
+      { q: "How can I contact CSW?", a: "You can contact us via email at contact@cyberspaceworks.com or through our contact form on the website." },
       { q: "Do you provide custom software solutions?", a: "Yes, we specialize in creating custom software solutions tailored to your business needs." },
       { q: "What technologies do you use?", a: "We use React.js, Node.js, Next.js, Flutter, MongoDB, WordPress, Wix, Tailwind CSS, and many more modern technologies." },
       { q: "Can you redesign my existing website?", a: "Absolutely! We provide UI/UX redesign services to enhance the look, feel, and performance of your website." },

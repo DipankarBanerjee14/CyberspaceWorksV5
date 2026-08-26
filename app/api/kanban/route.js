@@ -168,12 +168,10 @@ export async function GET() {
 // ─── POST — create task OR create column ──────────────────────────────────────
 
 export async function POST(request) {
+  try {
   const session = await getServerSession(authOptions);
-  if (
-    !session?.user ||
-    !["admin", "employee"].includes(session.user.role)
-  ) {
-    return Response.json({ error: "Forbidden" }, { status: 403 });
+  if (!session?.user) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const body = await request.json();
@@ -181,9 +179,12 @@ export async function POST(request) {
 
   // ── Create column ─────────────────────────────────────────────────────────
   if (body.action === "createColumn") {
+    if (!["admin", "employee"].includes(session.user.role)) {
+      return Response.json({ error: "Forbidden - only admin/employee can create columns" }, { status: 403 });
+    }
     const parsed = createColumnSchema.safeParse(body);
     if (!parsed.success) {
-      return Response.json({ error: "Invalid payload" }, { status: 400 });
+      return Response.json({ error: "Invalid payload", details: parsed.error.flatten() }, { status: 400 });
     }
 
     const { columnId, title } = parsed.data;
@@ -202,16 +203,37 @@ export async function POST(request) {
   // ── Create task ───────────────────────────────────────────────────────────
   const parsed = createTaskSchema.safeParse(body);
   if (!parsed.success) {
-    return Response.json({ error: "Invalid payload" }, { status: 400 });
+    console.error("Kanban createTask validation failed:", parsed.error.flatten());
+    return Response.json({ error: "Invalid payload", details: parsed.error.flatten() }, { status: 400 });
+  }
+
+  // Resolve creator id robustly — some next-auth setups only populate email
+  let creatorId = session.user.id;
+  if (!creatorId && session.user.email) {
+    const creatorLookup = await User.findOne({ email: session.user.email }).select("_id");
+    if (creatorLookup) creatorId = creatorLookup._id.toString();
+  }
+  if (!creatorId) {
+    console.error("Kanban POST: no creatorId resolved for session", session.user);
+    return Response.json({ error: "Invalid session — no user id" }, { status: 401 });
   }
 
   // FIX: If no assignee is provided, auto-assign to the session user (creator)
   let assigneeUser = null;
   if (parsed.data.assigneeId) {
-    assigneeUser = await User.findById(parsed.data.assigneeId).select("_id name email");
+    try {
+      assigneeUser = await User.findById(parsed.data.assigneeId).select("_id name email");
+    } catch (e) {
+      console.warn("Kanban: invalid assigneeId", parsed.data.assigneeId, e);
+      assigneeUser = null;
+    }
+    if (!assigneeUser) {
+      // fallback to creator if assignee not found
+      assigneeUser = await User.findById(creatorId).select("_id name email");
+    }
   } else {
     // Auto-assign to creator
-    assigneeUser = await User.findById(session.user.id).select("_id name email");
+    assigneeUser = await User.findById(creatorId).select("_id name email");
   }
 
   const resolvedAssigneeName =
@@ -233,34 +255,41 @@ export async function POST(request) {
     });
   }
 
-  const doc = await KanbanTask.create({
-    title: parsed.data.title.trim(),
-    description: parsed.data.description?.trim() || "",
-    priority: parsed.data.priority || "medium",
-    assignee: assigneeUser ? assigneeUser._id : null,
-    assigneeName: resolvedAssigneeName,
-    assigneeInitials: resolvedAssigneeInitials,
-    collaborators,
-    dueDate: parsed.data.dueDate ? new Date(parsed.data.dueDate) : null,
-    tags: parsed.data.tags || [],
-    // FIX: always persist columnId — this is the only field that determines column placement
-    columnId: parsed.data.columnId || "backlog",
-    createdBy: session.user.id,
-    updatedBy: session.user.id,
-  });
+  let doc;
+  try {
+    doc = await KanbanTask.create({
+      title: parsed.data.title.trim(),
+      description: parsed.data.description?.trim() || "",
+      priority: parsed.data.priority || "medium",
+      assignee: assigneeUser ? assigneeUser._id : null,
+      assigneeName: resolvedAssigneeName,
+      assigneeInitials: resolvedAssigneeInitials,
+      collaborators,
+      dueDate: parsed.data.dueDate ? new Date(parsed.data.dueDate) : null,
+      tags: parsed.data.tags || [],
+      // FIX: always persist columnId — this is the only field that determines column placement
+      columnId: parsed.data.columnId || "backlog",
+      createdBy: creatorId,
+      updatedBy: creatorId,
+    });
+  } catch (e) {
+    console.error("KanbanTask.create failed:", e);
+    return Response.json({ error: "Failed to create task", details: String(e?.message || e), stack: e?.stack }, { status: 500 });
+  }
 
   return Response.json({ taskId: doc._id?.toString() }, { status: 201 });
+  } catch (e) {
+    console.error("Kanban POST unhandled:", e);
+    return Response.json({ error: "Internal Server Error", details: String(e?.message || e), stack: e?.stack }, { status: 500 });
+  }
 }
 
 // ─── PATCH — update task OR reorder columns ───────────────────────────────────
 
 export async function PATCH(request) {
   const session = await getServerSession(authOptions);
-  if (
-    !session?.user ||
-    !["admin", "employee"].includes(session.user.role)
-  ) {
-    return Response.json({ error: "Forbidden" }, { status: 403 });
+  if (!session?.user) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const body = await request.json();
@@ -268,6 +297,9 @@ export async function PATCH(request) {
 
   // ── Reorder columns ───────────────────────────────────────────────────────
   if (body.action === "reorderColumns") {
+    if (!["admin", "employee"].includes(session.user.role)) {
+      return Response.json({ error: "Forbidden - only admin/employee can reorder columns" }, { status: 403 });
+    }
     const orderedIds = body.orderedIds;
     if (!Array.isArray(orderedIds)) {
       return Response.json({ error: "Invalid payload" }, { status: 400 });
@@ -283,11 +315,18 @@ export async function PATCH(request) {
   // ── Update task ───────────────────────────────────────────────────────────
   const parsed = updateTaskSchema.safeParse(body);
   if (!parsed.success) {
-    return Response.json({ error: "Invalid payload" }, { status: 400 });
+    console.error("Kanban PATCH validation failed:", parsed.error.flatten(), body);
+    return Response.json({ error: "Invalid payload", details: parsed.error.flatten() }, { status: 400 });
   }
 
   const { id, ...data } = parsed.data;
-  const task = await KanbanTask.findById(id);
+  let task;
+  try {
+    task = await KanbanTask.findById(id);
+  } catch (e) {
+    console.error("Kanban PATCH findById failed for id:", id, e);
+    return Response.json({ error: "Invalid task id" }, { status: 400 });
+  }
   if (!task) return Response.json({ error: "Not found" }, { status: 404 });
 
   if (data.title !== undefined) task.title = data.title.trim();
@@ -318,8 +357,18 @@ export async function PATCH(request) {
     // isDone is updated by pre-save hook — no need to set it here
   }
 
-  task.updatedBy = session.user.id;
-  await task.save(); // pre-save hook syncs isDone
+  let updaterId = session.user.id;
+  if (!updaterId && session.user.email) {
+    const u = await User.findOne({ email: session.user.email }).select("_id");
+    if (u) updaterId = u._id.toString();
+  }
+  task.updatedBy = updaterId || null;
+  try {
+    await task.save(); // pre-save hook syncs isDone
+  } catch (e) {
+    console.error("Kanban PATCH save failed:", e);
+    return Response.json({ error: "Failed to update task", details: String(e) }, { status: 500 });
+  }
 
   return Response.json({ ok: true });
 }
@@ -328,11 +377,8 @@ export async function PATCH(request) {
 
 export async function DELETE(request) {
   const session = await getServerSession(authOptions);
-  if (
-    !session?.user ||
-    !["admin", "employee"].includes(session.user.role)
-  ) {
-    return Response.json({ error: "Forbidden" }, { status: 403 });
+  if (!session?.user) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const body = await request.json();
@@ -340,6 +386,9 @@ export async function DELETE(request) {
 
   // ── Delete column — orphaned tasks move to backlog ────────────────────────
   if (body.action === "deleteColumn") {
+    if (!["admin", "employee"].includes(session.user.role)) {
+      return Response.json({ error: "Forbidden - only admin/employee can delete columns" }, { status: 403 });
+    }
     const parsed = deleteColumnSchema.safeParse(body);
     if (!parsed.success) {
       return Response.json({ error: "Invalid payload" }, { status: 400 });

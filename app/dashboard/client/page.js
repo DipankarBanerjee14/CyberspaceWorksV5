@@ -68,9 +68,14 @@ export default async function ClientDashboardPage() {
       _id: serializeId(p._id),
       title: p.title,
       description: p.description || "",
-      client: typeof p.client === "object" ? serializeUser(p.client) : serializeId(p.client),
+      client: typeof p.client === "object" && p.client !== null && typeof p.client.name !== "undefined" ? serializeUser(p.client) : serializeId(p.client),
+      assignedVendor: p.assignedVendor
+        ? typeof p.assignedVendor === "object" && p.assignedVendor !== null && typeof p.assignedVendor.name !== "undefined"
+          ? serializeUser(p.assignedVendor)
+          : serializeId(p.assignedVendor)
+        : null,
       assignedEmployees: (p.assignedEmployees || []).map((e) =>
-        typeof e === "object" ? serializeUser(e) : serializeId(e)
+        typeof e === "object" && e !== null && typeof e.name !== "undefined" ? serializeUser(e) : serializeId(e)
       ),
       tags: p.tags || [],
       startDate: p.startDate ? new Date(p.startDate).toISOString() : null,
@@ -78,12 +83,15 @@ export default async function ClientDashboardPage() {
       priority: p.priority,
       status: p.status,
       progress: p.progress || 0,
+      projectCost: p.projectCost != null ? Number(p.projectCost) : 0,
       tasks: (p.tasks || []).map(serializeTask),
-      createdBy: typeof p.createdBy === "object" ? serializeUser(p.createdBy) : serializeId(p.createdBy),
-      updatedBy: typeof p.updatedBy === "object" ? serializeUser(p.updatedBy) : serializeId(p.updatedBy),
+      createdBy: typeof p.createdBy === "object" && p.createdBy !== null && typeof p.createdBy.name !== "undefined" ? serializeUser(p.createdBy) : serializeId(p.createdBy),
+      updatedBy: typeof p.updatedBy === "object" && p.updatedBy !== null && typeof p.updatedBy.name !== "undefined" ? serializeUser(p.updatedBy) : serializeId(p.updatedBy),
       lastActivityAt: p.lastActivityAt ? new Date(p.lastActivityAt).toISOString() : null,
+      completedAt: p.completedAt ? new Date(p.completedAt).toISOString() : null,
       createdAt: p.createdAt ? new Date(p.createdAt).toISOString() : null,
       updatedAt: p.updatedAt ? new Date(p.updatedAt).toISOString() : null,
+      __v: typeof p.__v === "number" ? p.__v : 0,
     };
   }
 

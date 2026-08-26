@@ -210,6 +210,25 @@ io.on("connection", (socket) => {
     }
   });
 
+  // ===== MESSAGES READ EVENT =====
+  socket.on("messages-read", (data) => {
+    try {
+      const readerId = normalizeId(data?.readerId || userId);
+      const senderId = normalizeId(data?.senderId);
+      if (!readerId || !senderId) return;
+
+      emitToUsers([senderId], "messages-read", {
+        readerId,
+        senderId: readerId,
+        timestamp: new Date().toISOString(),
+      });
+
+      logger.logMessage("info", readerId, "messages_read", { senderId });
+    } catch (err) {
+      logger.logError("MESSAGES_READ", err, { userId });
+    }
+  });
+
   // ===== TICKET MESSAGE EVENT =====
   socket.on("ticket-message", (data, callback) => {
     try {

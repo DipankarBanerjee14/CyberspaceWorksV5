@@ -82,7 +82,7 @@ function NavItems({ items, compact = false }) {
   return (
     <SidebarMenu>
       {items.map((item) => (
-        <SidebarMenuItem key={item.title}>
+        <SidebarMenuItem key={item.title} className="relative">
           <SidebarMenuButton
             asChild
             className={cn(
@@ -97,8 +97,24 @@ function NavItems({ items, compact = false }) {
               <span className="group-data-[collapsible=icon]:hidden">
                 {compact || state === "collapsed" ? item.shortTitle || item.title : item.title}
               </span>
+              {item.unreadCount > 0 && state !== "collapsed" && (
+                <span className="ml-auto flex items-center gap-1.5">
+                  {item.unreadCount > 99 ? (
+                    <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-500 px-1.5 text-[10px] font-semibold text-white">
+                      99+
+                    </span>
+                  ) : (
+                    <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-500 px-1.5 text-[10px] font-semibold text-white">
+                      {item.unreadCount}
+                    </span>
+                  )}
+                </span>
+              )}
             </a>
           </SidebarMenuButton>
+          {item.unreadCount > 0 && state === "collapsed" && (
+            <span className="absolute top-1.5 right-1.5 h-2.5 w-2.5 rounded-full bg-red-500 border-2 border-background" />
+          )}
         </SidebarMenuItem>
       ))}
     </SidebarMenu>

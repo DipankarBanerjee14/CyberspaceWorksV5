@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { format, isToday, isYesterday, isThisWeek, isThisYear } from "date-fns"
 import {
   Search,
@@ -7,7 +8,9 @@ import {
   VolumeX,
   MoreHorizontal,
   Users,
-  Hash
+  Hash,
+  Plus,
+  MessageCircle
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -16,6 +19,14 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,7 +45,9 @@ interface ConversationListProps {
 
 // Enhanced time formatting function
 function formatMessageTime(timestamp: string): string {
+  if (!timestamp) return ""
   const date = new Date(timestamp)
+  if (Number.isNaN(date.getTime())) return ""
 
   if (isToday(date)) {
     return format(date, 'h:mm a') // 3:30 PM
@@ -55,7 +68,19 @@ export function ConversationList({
   onSelectConversation,
   onDeleteConversation,
 }: ConversationListProps) {
-  const { searchQuery, setSearchQuery, togglePin, toggleMute } = useChat()
+  const {
+    searchQuery,
+    setSearchQuery,
+    togglePin,
+    toggleMute,
+    currentUsers,
+    currentConversations,
+    ensureConversation,
+    setSelectedConversation,
+  } = useChat()
+
+  const [isNewChatOpen, setIsNewChatOpen] = useState(false)
+  const [newChatQuery, setNewChatQuery] = useState("")
 
   const filteredConversations = conversations.filter((conversation) =>
     conversation.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -72,8 +97,37 @@ export function ConversationList({
     return bTime - aTime
   })
 
+  const existingIds = new Set(currentConversations.map((c) => c.id))
+  const filteredUsers = currentUsers.filter((u) => {
+    const q = newChatQuery.trim().toLowerCase()
+    if (!q) return true
+    return (
+      u.name.toLowerCase().includes(q) ||
+      u.email.toLowerCase().includes(q) ||
+      u.role.toLowerCase().includes(q)
+    )
+  })
+  const sortedUsers = [...filteredUsers].sort((a, b) => {
+    // users without conversation first
+    const aHas = existingIds.has(a.id)
+    const bHas = existingIds.has(b.id)
+    if (!aHas && bHas) return -1
+    if (aHas && !bHas) return 1
+    return a.name.localeCompare(b.name)
+  })
+
+  const handleStartChat = (userId: string) => {
+    if (existingIds.has(userId)) {
+      setSelectedConversation(userId)
+    } else {
+      ensureConversation(userId)
+    }
+    setIsNewChatOpen(false)
+    setNewChatQuery("")
+  }
+
   return (
-    <div className="flex flex-col h-full overflow-hidden bg-white text-black border-r border-border/70 dark:bg-zinc-900 dark:text-white dark:border-white/10">
+    <div className="relative flex flex-col h-full overflow-hidden bg-white text-black border-r border-border/70 dark:bg-zinc-900 dark:text-white dark:border-white/10">
       {/* Header */}
       <div className="flex items-center justify-between h-16 px-4 border-b border-border/70 flex-shrink-0 dark:border-white/10">
         <h2 className="text-lg font-semibold text-black dark:text-white">Messages</h2>
@@ -95,7 +149,12 @@ export function ConversationList({
 
       {/* Conversations */}
       <ScrollArea className="flex-1 border-t border-border/60 bg-white dark:bg-zinc-900 dark:text-white dark:border-white/10 overflow-y-auto">
-        <div className="p-2 pr-3">
+        <div className="p-2 pr-3 pb-20">
+          {sortedConversations.length === 0 && (
+            <div className="py-12 text-center text-sm text-muted-foreground dark:text-white/60">
+              No conversations yet. Tap + to start a new chat.
+            </div>
+          )}
           {sortedConversations.map((conversation) => (
             <div
               key={conversation.id}
@@ -151,7 +210,7 @@ export function ConversationList({
 
                 <div className="flex items-center justify-between gap-2 min-w-0">
                   <p className="text-sm text-muted-foreground truncate flex-1 min-w-0 max-w-[200px] dark:text-white">
-                    {conversation.lastMessage.content}
+                    {conversation.lastMessage.content || <span className="italic opacity-70">Tap to start chatting</span>}
                   </p>
 
                   {/* Unread count */}
@@ -214,6 +273,78 @@ export function ConversationList({
           ))}
         </div>
       </ScrollArea>
+
+      {/* Floating circular New Chat button */}
+      <div className="absolute bottom-4 right-4">
+        <Dialog open={isNewChatOpen} onOpenChange={(open) => { setIsNewChatOpen(open); if (!open) setNewChatQuery("") }}>
+          <DialogTrigger asChild>
+            <Button
+              size="icon"
+              className="h-14 w-14 rounded-full shadow-lg bg-primary hover:bg-primary/90 text-primary-foreground"
+              aria-label="Start new chat"
+            >
+              <Plus className="h-6 w-6" />
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-md p-0 gap-0 overflow-hidden bg-white dark:bg-zinc-900">
+            <DialogHeader className="p-5 pb-3 border-b">
+              <DialogTitle>New message</DialogTitle>
+              <DialogDescription>Search users and start chatting</DialogDescription>
+            </DialogHeader>
+
+            <div className="p-4 pb-2">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  autoFocus
+                  placeholder="Search by name, email or role..."
+                  value={newChatQuery}
+                  onChange={(e) => setNewChatQuery(e.target.value)}
+                  className="pl-9"
+                />
+              </div>
+            </div>
+
+            <ScrollArea className="max-h-[380px]">
+              <div className="p-2">
+                {sortedUsers.length === 0 ? (
+                  <div className="py-10 text-center text-sm text-muted-foreground">No users found</div>
+                ) : (
+                  sortedUsers.map((u) => {
+                    const hasExisting = existingIds.has(u.id)
+                    return (
+                      <button
+                        key={u.id}
+                        onClick={() => handleStartChat(u.id)}
+                        className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-muted/70 text-left transition-colors"
+                      >
+                        <Avatar className="h-10 w-10">
+                          <AvatarImage src={u.avatar} alt={u.name} />
+                          <AvatarFallback>
+                            {u.name.split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <p className="font-medium truncate text-sm">{u.name}</p>
+                            {hasExisting && (
+                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted text-muted-foreground">existing chat</span>
+                            )}
+                          </div>
+                          <p className="text-xs text-muted-foreground truncate">{u.email} · {u.employeeRole || u.role}</p>
+                        </div>
+                        <div className="flex-shrink-0 h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                          <MessageCircle className="h-4 w-4" />
+                        </div>
+                      </button>
+                    )
+                  })
+                )}
+              </div>
+            </ScrollArea>
+          </DialogContent>
+        </Dialog>
+      </div>
     </div>
   )
 }

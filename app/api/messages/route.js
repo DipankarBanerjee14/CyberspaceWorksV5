@@ -30,9 +30,18 @@ export async function POST(req) {
   }
 
   // Block role combinations that should not chat directly.
-  if (
+  // Client ↔ Employee is allowed only for Manager / Customer Agent (per requirement:
+  // client can msg to admin, manager, customer agent)
+  const isClientEmployeePair =
     (sender.role === "client" && receiver.role === "employee") ||
-    (sender.role === "employee" && receiver.role === "client") ||
+    (sender.role === "employee" && receiver.role === "client");
+
+  if (isClientEmployeePair) {
+    const employee = sender.role === "employee" ? sender : receiver;
+    if (!["Manager", "Customer Agent"].includes(employee.employeeRole)) {
+      return Response.json({ error: "Not allowed" }, { status: 403 });
+    }
+  } else if (
     (sender.role === "vendor" && !["admin", "vendor"].includes(receiver.role)) ||
     (receiver.role === "vendor" && !["admin", "vendor"].includes(sender.role))
   ) {
@@ -57,6 +66,8 @@ export async function POST(req) {
     text: text.trim(),
   });
 
+  // Single emit - lib/socket/server's emitToUsers already handles HTTP fallback
+  // when no in-process io exists (serverless). Do not duplicate emit here.
   emitToUsers([receiver._id], "receive-message", message);
   await notificationService.createAndEmitNotification({
     userIds: [receiver._id],
@@ -66,29 +77,6 @@ export async function POST(req) {
     text: "New message",
     source: "chat",
   });
-
-  // Fallback: if the socket server runs as a separate process (e.g., on Render),
-  // POST to the socket server `/emit` endpoint so it can forward the event.
-  // This is useful in production where `emitToUsers` may be a no-op.
-  if (process.env.NEXT_PUBLIC_SOCKET_URL) {
-    try {
-      const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL.replace(/\/$/, "");
-
-      // send receive-message
-      await fetch(`${socketUrl}/emit`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          userIds: [receiver._id?.toString?.() || receiver._id],
-          eventName: "receive-message",
-          payload: message,
-          secret: process.env.SOCKET_EMIT_SECRET || undefined,
-        }),
-      }).catch(() => {})
-    } catch (err) {
-      // swallow errors - failure to notify socket server shouldn't block message creation
-    }
-  }
 
   return Response.json({ message });
 }

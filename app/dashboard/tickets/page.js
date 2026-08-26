@@ -655,6 +655,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { FiRefreshCw } from "react-icons/fi";
 import io from "socket.io-client";
 
 export const dynamic = "force-dynamic";
@@ -1053,7 +1054,7 @@ export default function TicketsPage() {
               className="rounded-lg border border-gray-200 dark:border-white/10 px-3 py-2 text-xs font-semibold uppercase tracking-wider
                 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
             >
-              + Create ticket
+              + New
             </button>
             <button
               type="button"
@@ -1061,7 +1062,8 @@ export default function TicketsPage() {
               className="rounded-lg border border-gray-200 dark:border-white/10 px-3 py-2 text-xs font-semibold uppercase tracking-wider
                 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
             >
-              Refresh
+              <FiRefreshCw />
+
             </button>
           </div>
         </div>
@@ -1297,7 +1299,7 @@ export default function TicketsPage() {
           <div
             role="dialog"
             aria-modal="true"
-            className="relative w-full max-w-2xl rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-[#0b0f14] p-6 shadow-2xl"
+            className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-[#0b0f14] p-6 shadow-2xl"
           >
             <div className="flex items-start justify-between gap-4">
               <div>

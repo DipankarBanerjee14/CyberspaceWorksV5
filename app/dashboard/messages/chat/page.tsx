@@ -33,7 +33,8 @@ export default function ChatPage() {
           email: u.email || "",
           lastSeen: new Date().toISOString(),
           role: u.role || "member",
-          department: "General",
+          employeeRole: u.employeeRole || null,
+          department: u.employeeRole || "General",
         }))
 
         const messagesByConversation: Record<string, Message[]> = {}
@@ -63,25 +64,37 @@ export default function ChatPage() {
           })
         )
 
-        const mappedConversations: Conversation[] = mappedUsers.map((u) => {
-          const list = messagesByConversation[u.id] || []
-          const last = list[list.length - 1]
+        // Only keep conversations that have at least one message.
+        // Previously every allowed user was shown with `lastMessage.timestamp = now`
+        // which caused the entire user directory to appear with the tab-open time.
+        const mappedConversations: Conversation[] = mappedUsers
+          .filter((u) => (messagesByConversation[u.id] || []).length > 0)
+          .map((u) => {
+            const list = messagesByConversation[u.id] || []
+            const last = list[list.length - 1]
 
-          return {
-            id: u.id,
-            name: u.name,
-            avatar: u.avatar,
-            type: "direct",
-            participants: [u.id],
-            isPinned: false,
-            isMuted: false,
-            unreadCount: Number(apiUsers.find((x: any) => x._id === u.id)?.unread || 0),
-            lastMessage: {
-              content: last?.content || "No messages yet",
-              timestamp: last?.timestamp || new Date().toISOString(),
-            },
+            return {
+              id: u.id,
+              name: u.name,
+              avatar: u.avatar,
+              type: "direct",
+              participants: [u.id],
+              isPinned: false,
+              isMuted: false,
+              unreadCount: Number(apiUsers.find((x: any) => x._id === u.id)?.unread || 0),
+              lastMessage: {
+                content: last.content,
+                timestamp: last.timestamp,
+              },
+            }
+          })
+
+        // Drop empty message buckets so the UI does not retain ghost threads
+        for (const uid of Object.keys(messagesByConversation)) {
+          if ((messagesByConversation[uid] || []).length === 0) {
+            delete messagesByConversation[uid]
           }
-        })
+        }
 
         setUsers(mappedUsers)
         setMessages(messagesByConversation)

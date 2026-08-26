@@ -100,10 +100,10 @@ export function MetricsOverview() {
       try {
         const res = await fetch("/api/dashboard/revenue");
         const data = await res.json();
-        console.log("Revenue response status:", res.ok, "data:", data);
+        // console.log("Revenue response status:", res.ok, "data:", data);
         
         if (res.ok && data.success) {
-          console.log("Revenue data:", data);
+          // console.log("Revenue data:", data);
           setRevenueData({
             totalRevenue: data.totalRevenue || 0,
             monthlyRevenue: data.monthlyRevenue || 0,
@@ -137,10 +137,10 @@ export function MetricsOverview() {
       try {
         const res = await fetch("/api/dashboard/active-users");
         const data = await res.json();
-        console.log("Active users response status:", res.ok, "data:", data);
+        // console.log("Active users response status:", res.ok, "data:", data);
         
         if (res.ok && data.success) {
-          console.log("Active clients data:", data);
+          // console.log("Active clients data:", data);
           setActiveUsersData({
             totalActiveClients: data.totalActiveClients || 0,
           });

@@ -1,10 +1,8 @@
 import * as React from "react"
-import { Controller } from "react-hook-form"
+import { Controller, FormProvider, useFormContext } from "react-hook-form"
 
-type FormProps = React.FormHTMLAttributes<HTMLFormElement>
-
-export function Form({ children, ...props }: FormProps) {
-  return <form {...props}>{children}</form>
+export function Form({ children, ...props }: React.ComponentProps<typeof FormProvider>) {
+  return <FormProvider {...props}>{children}</FormProvider>
 }
 
 export function FormField({ name, control, render, ...props }: any) {
