@@ -62,7 +62,7 @@ export function HeroSection() {
   </div>
 </div> */}
 
-<div className="fixed top-0 w-full px-4 pt-4 pb-1 mt-10 z-10 bg-black
+<div className="hidden md:block fixed top-0 w-full px-4 pt-4 pb-1 mt-10 z-10 bg-black
       backdrop-blur-xl
       shadow-[0_8px_32px_rgba(0,0,0,0.37)]
       supports-[backdrop-filter]:bg-black/20">
